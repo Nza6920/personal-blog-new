@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: personal_blog
+      MYSQL_USER: personal_blog
+      MYSQL_PASSWORD: personal_blog
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
