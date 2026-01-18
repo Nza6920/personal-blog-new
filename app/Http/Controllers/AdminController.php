@@ -28,14 +28,17 @@ class AdminController extends Controller
         return view('admin.create_and_edit', ['topic' => $topic]);
     }
 
-    public function store(TopicRequest $request, Topic $topic,ImageUploadHandler $uploader)
+    public function store(TopicRequest $request, Topic $topic, ImageUploadHandler $uploader)
     {
-        $topic->fill($request->all());
+        $topic->fill($request->only(['title', 'body']));
         $topic->user_id = Auth::id();
-        if ($request->background) {
-            $result = $uploader->save($request->background, 'background', $topic->id);
-            if ($result) {
-                $topic->background = $result['path'];
+        if ($request->hasFile('background')) {
+            $background = $request->file('background');
+            if ($background && $background->isValid()) {
+                $result = $uploader->save($background, 'background', $topic->id);
+                if ($result) {
+                    $topic->background = $result['path'];
+                }
             }
         }
         $topic->save();
@@ -52,11 +55,9 @@ class AdminController extends Controller
             'file_path' => ''
         ];
 
-        // 判断是否有上传文件，并赋值给 $file
-        if ($file = $request->upload_file) {
-            // 保存图片到本地
-            $result = $uploader->save($request->upload_file, 'topics', Auth::id(), 1024);
-            // 图片保存成功的话
+        $file = $request->file('upload_file');
+        if ($file && $file->isValid()) {
+            $result = $uploader->save($file, 'topics', Auth::id(), 1024);
             if ($result) {
                 $data['file_path'] = $result['path'];
                 $data['msg']       = "上传成功!";
@@ -73,13 +74,16 @@ class AdminController extends Controller
     }
 
     // 更新帖子
-    public function update(TopicRequest $request,Topic $topic,ImageUploadHandler $uploader)
+    public function update(TopicRequest $request, Topic $topic, ImageUploadHandler $uploader)
     {
-        $topic->fill($request->all());
-        if ($request->background) {
-            $result = $uploader->save($request->background, 'background', $topic->id);
-            if ($result) {
-                $topic->background = $result['path'];
+        $topic->fill($request->only(['title', 'body']));
+        if ($request->hasFile('background')) {
+            $background = $request->file('background');
+            if ($background && $background->isValid()) {
+                $result = $uploader->save($background, 'background', $topic->id);
+                if ($result) {
+                    $topic->background = $result['path'];
+                }
             }
         }
         $topic->save();

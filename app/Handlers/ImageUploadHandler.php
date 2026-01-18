@@ -3,6 +3,7 @@
 namespace App\Handlers;
 
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class ImageUploadHandler
 {
@@ -11,6 +12,10 @@ class ImageUploadHandler
 
     public function save($file, $folder, $file_prefix, $max_width = null)
     {
+        if (! $file instanceof UploadedFile || ! $file->isValid()) {
+            return false;
+        }
+
         // 构建存储的文件夹规则，值如：uploads/images/avatars/201709/21/
         // 文件夹切割能让查找效率更高。
         $folder_name = "uploads/images/$folder/" . date("Ym/d", time());
@@ -29,6 +34,10 @@ class ImageUploadHandler
         // 如果上传的不是图片将终止操作
         if ( ! in_array($extension, $this->allowed_ext)) {
             return false;
+        }
+
+        if (! is_dir($upload_path)) {
+            mkdir($upload_path, 0755, true);
         }
 
         // 将图片移动到我们的目标存储路径中

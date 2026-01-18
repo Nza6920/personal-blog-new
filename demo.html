@@ -1,0 +1,93 @@
+<h1>环境准备</h1>
+
+<blockquote><ul><li>centos 7</li><li>docker 20.10.6 </li></ul></blockquote>
+
+<h3>1. 拉取镜像</h3>
+
+<p>这里以 v2.0.3 为例, 更多版本参考<a href="https://hub.docker.com/r/nacos/nacos-server/tags">这里</a></p>
+
+<pre><code>docker pull nacos/nacos-server:v2.0.3</code></pre>
+
+<h3>2. 初始化 nacos 数据库</h3>
+
+<p>这里以MYSQL 数据库为例, 访问 <a href="https://github.com/alibaba/nacos/tags">nacos 官方地址</a>, 下载指定版本的 nacos.zip 并解压到本地。</p>
+
+<p>访问 conf 文件夹, 里面的 nacos-mysql.sql 就是对应 nacos 版本的 MYSQL 初始化脚本。</p>
+
+<h1>单机部署</h1>
+
+<p>启动一个名为 nacos-test 实例, 并指定 nacos 端口为 7016</p>
+
+<pre><code>docker run -d --name nacos-test -p 7016:7016 \
+--env MODE=standalone \
+--env NACOS_SERVER_IP=192.168.56.10 \
+--env NACOS_APPLICATION_PORT=7016 \
+--env SPRING_DATASOURCE_PLATFORM=mysql \
+--env MYSQL_SERVICE_HOST=你的mysql主机地址 \
+--env MYSQL_SERVICE_PORT=你的mysql端口 \
+--env MYSQL_SERVICE_DB_NAME=数据库名称 \
+--env MYSQL_SERVICE_USER=数据库用户名 \
+--env MYSQL_SERVICE_PASSWORD=数据库密码 \
+--env MYSQL_DATABASE_NUM=1 \
+--env MYSQL_SERVICE_DB_PARAM='characterEncoding=utf8&amp;connectTimeout=10000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useSSL=false' \
+nacos/nacos-server:v2.0.3</code></pre>
+
+<p>可以使用以下命令查看日志</p>
+
+<pre><code>docker logs -ft --tail 200 nacos-test<br /></code></pre>
+
+<p>启动成功后, 访问 ip + /nacos:7016, 进入 nacos 登陆界面, 默认用户名密码都是 nacos</p>
+
+<h1>集群部署</h1>
+
+<p><span style="color:rgb(51,51,51);font-size:18px;">启动一个名为 nacos-cluster-1 实例, 并指定 nacos 端口为 8948</span><br /></p>
+
+<pre><code>docker run -d --name nacos-cluster-1 -p 8948:8948 \
+--env MODE=cluster \
+--env NACOS_SERVERS=192.168.56.10:8948,192.168.56.10:8848 \
+--env NACOS_SERVER_IP=192.168.56.10 \
+--env NACOS_APPLICATION_PORT=8948 \
+--env SPRING_DATASOURCE_PLATFORM=mysql \
+--env MYSQL_SERVICE_HOST=你的mysql主机地址 \
+--env MYSQL_SERVICE_PORT=你的mysql端口 \
+--env MYSQL_SERVICE_DB_NAME=数据库名称 \
+--env MYSQL_SERVICE_USER=数据库用户名 \
+--env MYSQL_SERVICE_PASSWORD=数据库密码 \
+--env MYSQL_DATABASE_NUM=1 \
+--env MYSQL_SERVICE_DB_PARAM='characterEncoding=utf8&amp;connectTimeout=10000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useSSL=false' \
+nacos/nacos-server:v2.0.3<br /></code></pre>
+
+<p>启动一个名为 nacos-cluster-2 实例, 并指定 nacos 端口为 8848<br /></p>
+
+<pre><code>docker run -d --name nacos-cluster-1 -p 8848:8848\
+--env MODE=cluster \
+--env NACOS_SERVERS=192.168.56.10:8948,192.168.56.10:8848 \
+--env NACOS_SERVER_IP=192.168.56.10 \
+--env NACOS_APPLICATION_PORT=8948 \
+--env SPRING_DATASOURCE_PLATFORM=mysql \
+--env MYSQL_SERVICE_HOST=你的mysql主机地址 \
+--env MYSQL_SERVICE_PORT=你的mysql端口 \
+--env MYSQL_SERVICE_DB_NAME=数据库名称 \
+--env MYSQL_SERVICE_USER=数据库用户名 \
+--env MYSQL_SERVICE_PASSWORD=数据库密码 \
+--env MYSQL_DATABASE_NUM=1 \
+--env MYSQL_SERVICE_DB_PARAM='characterEncoding=utf8&amp;connectTimeout=10000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useSSL=false' \
+nacos/nacos-server:v2.0.3</code></pre>
+
+<p>与单机部署区别在于指定 <b>MODE</b> 为 cluster, 并通过 <b>NACOS-SERVERS</b> 参数设置当前集群下的所有 nacos 实例。</p>
+
+<p>启动成功后, 访问 nacos 控制台 集群管理 下的 节点列表 页面, 这里显示了集群环境中所有 Nacos Server 节点以及对应的状态。</p>
+
+<h1>常见问题</h1>
+
+<p>如果你碰到了启动失败的问题, 不妨先去检查以下两个地方:</p>
+
+<blockquote><ol><li>端口占用: 指定端口被占用, 换个端口重新启动服务。</li><li>MySQL 连接不上: 检查数据库配置是否正确, 如果使用的是虚拟机, 需要保证虚拟机和数据库之间是可达的。</li></ol></blockquote>
+
+<h1>属性配置列表</h1>
+
+<table><thead><tr><th>name</th><th>description</th><th>option</th></tr></thead><tbody><tr><td>MODE</td><td>cluster/standalone</td><td>cluster/standalone default cluster</td></tr><tr><td>NACOS_SERVERS</td><td>nacos cluster address</td><td>eg. ip1:port1 ip2:port2 ip3:port3</td></tr><tr><td>PREFER_HOST_MODE</td><td>Whether hostname are supported</td><td>hostname/ip default ip</td></tr><tr><td>NACOS_APPLICATION_PORT</td><td>nacos server port</td><td>default 8848</td></tr><tr><td>NACOS_SERVER_IP</td><td>custom nacos server ip when network was mutil-network</td><td></td></tr><tr><td>SPRING_DATASOURCE_PLATFORM</td><td>standalone support mysql</td><td>mysql / empty default empty</td></tr><tr><td>MYSQL_SERVICE_HOST</td><td>mysql host</td><td></td></tr><tr><td>MYSQL_SERVICE_PORT</td><td>mysql database port</td><td>default : 3306</td></tr><tr><td>MYSQL_SERVICE_DB_NAME</td><td>mysql database name</td><td></td></tr><tr><td>MYSQL_SERVICE_USER</td><td>username of database</td><td></td></tr><tr><td>MYSQL_SERVICE_PASSWORD</td><td>password of database</td><td></td></tr><tr><td>MYSQL_DATABASE_NUM</td><td>It indicates the number of database</td><td>default :1</td></tr><tr><td>MYSQL_SERVICE_DB_PARAM</td><td>Database url parameter</td><td>default : characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useSSL=false</td></tr><tr><td>JVM_XMS</td><td>-Xms</td><td>default :1g</td></tr><tr><td>JVM_XMX</td><td>-Xmx</td><td>default :1g</td></tr><tr><td>JVM_XMN</td><td>-Xmn</td><td>default :512m</td></tr><tr><td>JVM_MS</td><td>-XX:MetaspaceSize</td><td>default :128m</td></tr><tr><td>JVM_MMS</td><td>-XX:MaxMetaspaceSize</td><td>default :320m</td></tr><tr><td>NACOS_DEBUG</td><td>enable remote debug</td><td>y/n default :n</td></tr><tr><td>TOMCAT_ACCESSLOG_ENABLED</td><td>server.tomcat.accesslog.enabled</td><td>default :false</td></tr><tr><td>NACOS_AUTH_SYSTEM_TYPE</td><td>The auth system to use, currently only 'nacos' is supported</td><td>default :nacos</td></tr><tr><td>NACOS_AUTH_ENABLE</td><td>If turn on auth system</td><td>default :false</td></tr><tr><td>NACOS_AUTH_TOKEN_EXPIRE_SECONDS</td><td>The token expiration in seconds</td><td>default :18000</td></tr><tr><td>NACOS_AUTH_TOKEN</td><td>The default token</td><td>default :SecretKey012345678901234567890123456789012345678901234567890123456789</td></tr><tr><td>NACOS_AUTH_CACHE_ENABLE</td><td>Turn on/off caching of auth information. By turning on this switch, the update of auth information would have a 15 seconds delay.</td><td>default : false</td></tr><tr><td>MEMBER_LIST</td><td>Set the cluster list with a configuration file or command-line argument</td><td>eg:192.168.16.101:8847?raft_port=8807,192.168.16.101?raft_port=8808,192.168.16.101:8849?raft_port=8809</td></tr><tr><td>EMBEDDED_STORAGE</td><td>Use embedded storage in cluster mode without mysql</td><td><code>embedded</code> default : none</td></tr><tr><td>NACOS_AUTH_CACHE_ENABLE</td><td>nacos.core.auth.caching.enabled</td><td>default : false</td></tr><tr><td>NACOS_AUTH_USER_AGENT_AUTH_WHITE_ENABLE</td><td>nacos.core.auth.enable.userAgentAuthWhite</td><td>default : false</td></tr><tr><td>NACOS_AUTH_IDENTITY_KEY</td><td>nacos.core.auth.server.identity.key</td><td>default : serverIdentity</td></tr><tr><td>NACOS_AUTH_IDENTITY_VALUE</td><td>nacos.core.auth.server.identity.value</td><td>default : security</td></tr><tr><td>NACOS_SECURITY_IGNORE_URLS</td><td>nacos.security.ignore.urls</td><td>default : <code>/,/error,/**/*.css,/**/*.js,/**/*.html,/**/*.map,/**/*.svg,/**/*.png,/**/*.ico,/console-fe/public/**,/v1/auth/**,/v1/console/health/**,/actuator/**,/v1/console/server/**</code></td></tr></tbody></table>
+
+<h1>参考链接</h1>
+
+<blockquote><p>1. nacos 官方 GitHub: <a href="https://github.com/alibaba/nacos">https://github.com/alibaba/nacos</a></p><p>2. nacos docker hub: <a href="https://hub.docker.com/r/nacos/nacos-server">https://hub.docker.com/r/nacos/nacos-server</a></p><p>3. docker 教程: <a href="https://www.runoob.com/docker/docker-tutorial.html">https://www.runoob.com/docker/docker-tutorial.html</a></p></blockquote>
