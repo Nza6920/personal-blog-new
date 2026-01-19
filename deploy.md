@@ -25,7 +25,14 @@ sudo chown -R $USER:$USER /var/www/personal-blog
 cd /var/www/personal-blog
 ```
 
-## 4) 配置环境变量
+## 4) 安装依赖并构建资源
+```bash
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+```
+
+## 5) 配置环境变量
 ```bash
 cp .env.example .env
 php artisan key:generate
@@ -36,12 +43,7 @@ php artisan key:generate
 - Laravel 12.x 常用项：`CACHE_STORE`、`SESSION_DRIVER`、`QUEUE_CONNECTION`、`BROADCAST_CONNECTION`、`FILESYSTEM_DISK`
 - 邮件：`MAIL_MAILER` 与发件人信息（如仅记录日志可用 `log`）
 
-## 5) 安装依赖并构建资源
-```bash
-composer install --no-dev --optimize-autoloader
-npm install
-npm run build
-```
+
 
 ## 6) 数据库与权限
 ```bash
