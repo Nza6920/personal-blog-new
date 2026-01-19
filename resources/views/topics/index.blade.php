@@ -18,6 +18,81 @@
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="icon" href="{{asset('uploads/images/system/niu.png')}}" type="image/x-icon">
     <style>
+        #fh5co-aside nav ul li {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 6px;
+        }
+
+        #fh5co-aside nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        .home-theme-toggle {
+            position: relative;
+            top: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 0;
+            color: rgba(255, 255, 255, 0.5);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            padding: 0;
+            font-size: 14px;
+            line-height: 30px;
+            vertical-align: middle;
+        }
+
+        .home-theme-toggle i {
+            display: block;
+            line-height: 30px;
+        }
+
+        .home-theme-toggle:hover {
+            background: white;
+            color: #000;
+        }
+
+        .home-theme-toggle .icon-light-up {
+            display: none;
+        }
+
+        .theme-dark .home-theme-toggle .icon-light-up {
+            display: inline-block;
+        }
+
+        .theme-dark .home-theme-toggle .icon-light-down {
+            display: none;
+        }
+
+        .theme-dark {
+            background: #262b35;
+            color: #e6e6e6;
+        }
+
+        .theme-dark #page {
+            background: #262b35;
+        }
+
+        .theme-dark a {
+            color: #c9d8ff;
+        }
+
+        .theme-dark .topic-body {
+            color: #e6e6e6;
+        }
+
+        .theme-dark .topic-body a {
+            color: #fff;
+        }
+
+        .theme-dark .topic-body a:hover {
+            color: #c9d8ff;
+        }
+
         .topic-body img {
             cursor: zoom-in;
             max-width: 100%;
@@ -79,6 +154,12 @@
                     <nav role="navigation">
                         <ul>
                             <li><a href="{{ route('home.show') }}"><i class="icon-home"></i></a></li>
+                            <li>
+                                <button type="button" class="home-theme-toggle" aria-label="Toggle theme" aria-pressed="false">
+                                    <i class="icon-light-down" aria-hidden="true"></i>
+                                    <i class="icon-light-up" aria-hidden="true"></i>
+                                </button>
+                            </li>
                         </ul>
                     </nav>
                     <div class="page-title">
@@ -189,6 +270,29 @@
                                                     <script src="/js/modernizr-2.6.2.min.js"></script>
                                                     <script>
                                                         $(function () {
+                                                            const storageKey = 'theme';
+                                                            const $body = $('body');
+                                                            const $toggle = $('.home-theme-toggle');
+
+                                                            function applyTheme(value) {
+                                                                if (value === 'dark') {
+                                                                    $body.addClass('theme-dark');
+                                                                    $toggle.attr('aria-pressed', 'true');
+                                                                } else {
+                                                                    $body.removeClass('theme-dark');
+                                                                    $toggle.attr('aria-pressed', 'false');
+                                                                }
+                                                            }
+
+                                                            applyTheme(localStorage.getItem(storageKey));
+
+                                                            $toggle.on('click', function () {
+                                                                const isDark = $body.hasClass('theme-dark');
+                                                                const next = isDark ? 'light' : 'dark';
+                                                                localStorage.setItem(storageKey, next);
+                                                                applyTheme(next);
+                                                            });
+
                                                             const $overlay = $('.image-preview-overlay');
                                                             const $preview = $overlay.find('img');
                                                             const minScale = 0.5;
@@ -202,7 +306,7 @@
                                                             let translateY = 0;
 
                                                             function applyTransform() {
-                                                                var scale = currentScale.toFixed(2);
+                                                                const scale = currentScale.toFixed(2);
                                                                 $preview.css('transform', 'translate(' + translateX + 'px, ' + translateY + 'px) scale(' + scale + ')');
                                                             }
 
