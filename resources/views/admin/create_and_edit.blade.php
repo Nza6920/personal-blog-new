@@ -64,11 +64,11 @@
 @endsection
 
 @section('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/easymde/easymde.min.css') }}">
 @stop
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script src="{{ asset('vendor/easymde/easymde.min.js') }}"></script>
 
     <script>
     $(document).ready(function(){
