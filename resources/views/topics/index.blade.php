@@ -1,3 +1,9 @@
+@php
+	use League\CommonMark\Environment\Environment;
+	use League\CommonMark\MarkdownConverter;
+
+	$markdownConverter = new MarkdownConverter(Environment::createCommonMarkEnvironment());
+@endphp
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -38,7 +44,11 @@
 			<div class="fh5co-post">
 				<div class="fh5co-entry padding">
 					<div class="topic-body">
-							{!! $topic->body !!}
+							@if ($topic->body_type === 'MARKDOWN')
+								{!! $markdownConverter->convert($topic->body)->getContent() !!}
+							@else
+								{!! $topic->body !!}
+							@endif
 					</div>
 			</div>
 		</div>
@@ -99,7 +109,7 @@
 
 	<footer class="home_footer">
 		<div >
-			&copy;Niu Blog 2021 .Powered By Niu
+			&copy;Niu Blog 2026 .Powered By Niu
 				<br><a href="https://beian.miit.gov.cn/" target="_blank">青ICP备18000982号-1</a>
 		</div>
 	</footer>

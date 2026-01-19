@@ -37,6 +37,14 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="body_type">文本类型</label>
+                        <select name="body_type" id="body_type" class="form-control">
+                            <option value="HTML" @selected(old('body_type', $topic->body_type ?? 'HTML') === 'HTML')>HTML</option>
+                            <option value="MARKDOWN" @selected(old('body_type', $topic->body_type) === 'MARKDOWN')>MARKDOWN</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="" class="avatar-label">背景图片</label>
                         <input type="file" name="background">
                         @if($topic->background)
@@ -56,47 +64,41 @@
 @endsection
 
 @section('styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/simditor.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
 @stop
 
 @section('scripts')
-    <script type="text/javascript"  src="{{ asset('js/module.js') }}"></script>
-    <script type="text/javascript"  src="{{ asset('js/hotkeys.js') }}"></script>
-    <script type="text/javascript"  src="{{ asset('js/uploader.js') }}"></script>
-    <script type="text/javascript"  src="{{ asset('js/simditor.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 
     <script>
     $(document).ready(function(){
-        var editor = new Simditor({
-            textarea: $('#editor'),
-            upload: {
-                url: '{{ route('admin.upload_image') }}',
-                params: { _token: '{{ csrf_token() }}' },
-                fileKey: 'upload_file',
-                connectionCount: 3,
-                leaveConfirm: '文件上传中，关闭此页面将取消上传。'
-            },
-            pasteImage: true,
-            toolbar: [
-                'title',
-                'bold',
-                'italic',
-                'underline',
-                'strikethrough',
-                'fontScale',
-                'color',
-                'ol',          
-                'ul',           
-                'blockquote',
-                'code',          
-                'table',
-                'link',
-                'image',
-                'hr',             
-                'indent',
-                'outdent',
-                'alignment'
-            ]
+        new EasyMDE({
+            element: document.getElementById('editor'),
+            forceSync: true,
+            imageUploadFunction: function (file, onSuccess, onError) {
+                var formData = new FormData();
+                formData.append('upload_file', file);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                fetch('{{ route('admin.upload_image') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(function (response) { return response.json(); })
+                    .then(function (data) {
+                        if (data && data.success && data.file_path) {
+                            onSuccess(data.file_path);
+                        } else {
+                            onError((data && data.msg) ? data.msg : 'Image upload failed.');
+                        }
+                    })
+                    .catch(function () {
+                        onError('Image upload failed.');
+                    });
+            }
         });
     });
     </script>

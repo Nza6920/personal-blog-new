@@ -21,6 +21,7 @@ class TopicFactory extends Factory
         return [
             'title' => $sentence,
             'body' => fake()->text(),
+            'body_type' => 'HTML',
             'excerpt' => $sentence,
             'background' => asset('uploads/images/test/image_2.jpg'),
             'created_at' => $createdAt,

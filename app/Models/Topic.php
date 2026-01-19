@@ -10,7 +10,7 @@ class Topic extends Model
     use HasFactory;
     use Traits\HashIdHelper;
 
-    protected $fillable = ['title', 'body'];
+    protected $fillable = ['title', 'body', 'body_type'];
 
     protected $casts = [
         'created_at' => 'datetime',

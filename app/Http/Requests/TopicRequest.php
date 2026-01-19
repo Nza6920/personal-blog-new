@@ -17,6 +17,7 @@ class TopicRequest extends Request
                 return [
                     'title'       => 'required|min:2',
                     'body'        => 'required|min:3',
+                    'body_type'   => 'nullable|in:MARKDOWN,HTML',
                 ];
             }
             case 'GET':

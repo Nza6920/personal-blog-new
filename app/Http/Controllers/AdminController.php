@@ -30,7 +30,8 @@ class AdminController extends Controller
 
     public function store(TopicRequest $request, Topic $topic, ImageUploadHandler $uploader)
     {
-        $topic->fill($request->only(['title', 'body']));
+        $topic->fill($request->only(['title', 'body', 'body_type']));
+        $topic->body_type = $topic->body_type ?: 'HTML';
         $topic->user_id = Auth::id();
         if ($request->hasFile('background')) {
             $background = $request->file('background');
@@ -76,7 +77,8 @@ class AdminController extends Controller
     // 更新帖子
     public function update(TopicRequest $request, Topic $topic, ImageUploadHandler $uploader)
     {
-        $topic->fill($request->only(['title', 'body']));
+        $topic->fill($request->only(['title', 'body', 'body_type']));
+        $topic->body_type = $topic->body_type ?: 'HTML';
         if ($request->hasFile('background')) {
             $background = $request->file('background');
             if ($background && $background->isValid()) {
