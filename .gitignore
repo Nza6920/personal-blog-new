@@ -24,3 +24,5 @@ Homestead.yaml
 Thumbs.db
 .idea/
 personal-blog.conf
+/public/uploads/images/background/
+/public/uploads/images/topics/
