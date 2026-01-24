@@ -25,6 +25,7 @@ This is a Laravel 12 app with Vite assets.
 - PHP style: follow Laravel conventions; keep class names in StudlyCase and files in PSR-4 paths (e.g., `App/Http/Controllers`).
 - Blade: use kebab-case view files (e.g., `resources/views/blog/index.blade.php`).
 - Formatting: use `php artisan pint` if you add/modify PHP code.
+- UI stack: Livewire 4.x and `livewire/flux` ^2.11 are installed and available for new work.
 
 ## Testing Guidelines
 - Framework: PHPUnit (`phpunit.xml` defines `tests/Unit` and `tests/Feature`).
@@ -39,3 +40,9 @@ This is a Laravel 12 app with Vite assets.
 ## Security & Configuration Tips
 - Copy `.env.example` to `.env` and set app secrets locally; never commit real credentials.
 - Database defaults for Docker are in `docker-compose.yml`; align `.env` values accordingly.
+
+## UI Components & Interaction Guidelines
+- Prefer Livewire components for interactive UI (forms, filters, pagination) over custom JS.
+- Use Flux components for consistent UI patterns where possible.
+- Keep Blade views thin; move stateful logic and validation into Livewire components.
+- Avoid duplicating state between Livewire and frontend scripts; use minimal JS only when necessary.
