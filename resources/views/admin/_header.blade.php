@@ -1,45 +1,33 @@
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-            <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ route('admin.show') }}">
+﻿<header class="fixed inset-x-0 top-0 z-50 w-full border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+    <div class="mx-auto w-full max-w-6xl px-6 py-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <a class="text-lg font-semibold tracking-tight text-slate-900 dark:text-white" href="{{ route('admin.show') }}">
                 博客后台
             </a>
-        </div>
 
-        <div class="collapse navbar-collapse" id="app-navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li>
-                  <a href="{{ route('admin.create') }}">
-                      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                  </a>
-              </li>
-              <li class="dropdown">
-
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                      <span class="user-avatar pull-left" style="margin-right:8px; margin-top:-5px;">
-                          <img src="{{ Auth::user()->avatar }}" class="img-responsive img-circle" width="30px" height="30px">
-                      </span>
-                      {{ Auth::user()->name }} <span class="caret"></span>
-                  </a>
-
-
-                  <ul class="dropdown-menu" role="menu">
-                      <li>
-                          <a href="#"
-                              onclick="event.preventDefault();
-                                       document.getElementById('logout-form').submit();">
-                              退出登录
-                          </a>
-                          <form id="logout-form" action="{{ route('logout') }}" method="post" style="display: none;">
-                              {{ method_field('DELETE') }}
-                              {{ csrf_field() }}
-                          </form>
-                      </li>
-
-                  </ul>
-              </li>
-            </ul>
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="hidden items-center sm:flex">
+                    <flux:radio.group x-data variant="segmented" x-model="$flux.appearance">
+                        <flux:radio value="light" icon="sun" />
+                        <flux:radio value="dark" icon="moon" />
+                        <flux:radio value="system" icon="computer-desktop" />
+                    </flux:radio.group>
+                </div>
+                <div class="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs leading-none text-slate-700 shadow-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    <img src="{{ Auth::user()->avatar }}" class="h-7 w-7 rounded-md border border-slate-200 object-cover dark:border-slate-700" alt="用户头像">
+                    <span class="font-medium">{{ Auth::user()->name }}</span>
+                    <form action="{{ route('logout') }}" method="post">
+                        @method('DELETE')
+                        @csrf
+                        <flux:button type="submit" variant="ghost" size="sm">
+                            退出
+                        </flux:button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
+</header>
+
+
+
