@@ -12,8 +12,23 @@ class AdminController extends Controller
 {
     public function show(Request $request)
     {
-        $topics = $request->user()->topics()->latest('id')->with(['user'])->paginate(15);
-        return view('admin.index', ['user' => $request->user(), 'topics' => $topics ]);
+        $search = trim((string) $request->input('search', ''));
+        $topicsQuery = $request->user()->topics()->latest('id')->with(['user']);
+
+        if ($search !== '') {
+            $topicsQuery->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%");
+            });
+        }
+
+        $topics = $topicsQuery->paginate(15);
+
+        return view('admin.index', [
+            'user' => $request->user(),
+            'topics' => $topics,
+            'search' => $search,
+        ]);
     }
 
     public function destroy(Topic $topic)

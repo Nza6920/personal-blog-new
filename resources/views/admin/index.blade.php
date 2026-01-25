@@ -5,6 +5,17 @@
         <section class="space-y-6">
             <div
                 class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <form method="get" action="{{ route('admin.show') }}" class="mb-6">
+                    <flux:input
+                        id="admin-search"
+                        name="search"
+                        value="{{ $search }}"
+                        kbd="⌘K/Ctrl+K"
+                        icon="magnifying-glass"
+                        placeholder="Search..."
+                    />
+                </form>
+
                 @include('admin._topic_list', ['topics' => $topics])
             </div>
 
@@ -17,4 +28,41 @@
             @include('admin._sidebar')
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('keydown', function (event) {
+            var isShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
+            if (!isShortcut) {
+                return;
+            }
+
+            var searchInput = document.getElementById('admin-search');
+            if (!searchInput) {
+                return;
+            }
+
+            event.preventDefault();
+            searchInput.focus();
+            searchInput.select();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var searchInput = document.getElementById('admin-search');
+            if (!searchInput) {
+                return;
+            }
+
+            var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+            var isMac = /Mac|iPhone|iPad|iPod/.test(platform);
+            var kbdLabel = searchInput.closest('[data-flux-input]')?.querySelector('span.pointer-events-none');
+
+            if (!kbdLabel) {
+                return;
+            }
+
+            kbdLabel.textContent = isMac ? '⌘K' : 'Ctrl+K';
+        });
+    </script>
 @endsection
