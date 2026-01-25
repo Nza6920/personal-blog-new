@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Actions\Topics\CreateTopic;
 use App\Actions\Topics\DeleteTopic;
 use App\Actions\Topics\UpdateTopic;
+use App\Actions\Users\UpdateUserProfile;
 use App\Actions\Users\UpdateUserPassword;
 use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class AdminController extends Controller
@@ -39,6 +41,32 @@ class AdminController extends Controller
     public function profile(Request $request)
     {
         return view('admin.profile', ['user' => $request->user()]);
+    }
+
+    public function updateProfile(Request $request, UpdateUserProfile $updateUserProfile, ImageUploadHandler $uploader)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($request->user()->id),
+            ],
+            'avatar' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $updateUserProfile->handle(
+            $request->user(),
+            [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+            ],
+            $request->file('avatar'),
+            $uploader
+        );
+
+        return back()->with('success', '资料已更新');
     }
 
     public function updatePassword(Request $request, UpdateUserPassword $updateUserPassword)
@@ -117,5 +145,4 @@ class AdminController extends Controller
         return redirect()->route('admin.show')->with('success', '更新成功！');
     }
 }
-
 

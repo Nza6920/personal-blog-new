@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::post('upload_image', [AdminController::class, 'uploadImage'])->name('admin.upload_image');
     Route::delete('logout', [SessionsController::class, 'destroy'])->name('logout');
     Route::get('admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
     Route::post('admin/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password');
     Route::get('admin/edit/{topic}', [AdminController::class, 'edit'])->name('admin.edit');
     Route::put('admin/update/{topic}', [AdminController::class, 'update'])->name('admin.update');
