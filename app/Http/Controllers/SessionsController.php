@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Actions\Auth\LoginUser;
+use App\Actions\Auth\LogoutUser;
 use App\Http\Requests\SessionRequest;
-
 
 class SessionsController extends Controller
 {
@@ -14,25 +13,25 @@ class SessionsController extends Controller
         return view('sessions.login');
     }
 
-    public function store(SessionRequest $request)
+    public function store(SessionRequest $request, LoginUser $loginUser)
     {
         $credentials = [
-          'email' => $request->username,
-          'password' => $request->password,
+            'email' => $request->username,
+            'password' => $request->password,
         ];
 
-        if (!Auth::attempt($credentials)) {
-          session()->flash('danger', '很抱歉，您的邮箱和密码不匹配.');
-          return redirect()->back();
+        if (!$loginUser->handle($credentials)) {
+            session()->flash('danger', '抱歉，邮箱或密码不匹配。');
+            return redirect()->back();
         }
 
         return redirect()->route('admin.show');
     }
 
-    public function destroy()
+    public function destroy(LogoutUser $logoutUser)
     {
-      Auth::logout();
-      session()->flash('success', '您已成功退出！');
-      return redirect('admin');
+        $logoutUser->handle();
+        session()->flash('success', '您已成功退出！');
+        return redirect('admin');
     }
 }

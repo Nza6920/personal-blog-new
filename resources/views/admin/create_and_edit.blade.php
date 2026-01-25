@@ -5,7 +5,6 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <p class="text-xs uppercase tracking-[0.2em] text-slate-400">文章编辑</p>
                     <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
                         @if($topic->id)
                             编辑话题
@@ -14,7 +13,7 @@
                         @endif
                     </h2>
                 </div>
-                <flux:button href="{{ route('admin.show') }}" variant="ghost" size="sm">
+                <flux:button href="{{ route('admin.show') }}" size="sm">
                     返回列表
                 </flux:button>
             </div>
@@ -53,12 +52,12 @@
 
                                 <flux:select name="body_type" id="body_type" label="文本类型">
                                     <option
-                                        value="HTML" @selected(old('body_type', $topic->body_type ?? 'HTML') === 'HTML')>
-                                        HTML
+                                        value="MARKDOWN" @selected(old('body_type', $topic->body_type ?? 'MARKDOWN') === 'MARKDOWN')>
+                                        MARKDOWN
                                     </option>
                                     <option
-                                        value="MARKDOWN" @selected(old('body_type', $topic->body_type) === 'MARKDOWN')>
-                                        MARKDOWN
+                                        value="HTML" @selected(old('body_type', $topic->body_type ?? 'MARKDOWN') === 'HTML')>
+                                        HTML
                                     </option>
                                 </flux:select>
 
@@ -191,4 +190,3 @@
         });
     </script>
 @stop
-

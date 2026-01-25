@@ -14,8 +14,10 @@
                     </flux:radio.group>
                 </div>
                 <div class="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs leading-none text-slate-700 shadow-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                    <img src="{{ Auth::user()->avatar }}" class="h-7 w-7 rounded-md border border-slate-200 object-cover dark:border-slate-700" alt="用户头像">
-                    <span class="font-medium">{{ Auth::user()->name }}</span>
+                    <a href="{{ route('admin.profile') }}" class="flex items-center gap-2">
+                        <img src="{{ Auth::user()->avatar }}" class="h-7 w-7 rounded-md border border-slate-200 object-cover dark:border-slate-700" alt="用户头像">
+                        <span class="font-medium">{{ Auth::user()->name }}</span>
+                    </a>
                     <form action="{{ route('logout') }}" method="post">
                         @method('DELETE')
                         @csrf
