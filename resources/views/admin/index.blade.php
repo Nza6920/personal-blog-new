@@ -24,7 +24,7 @@
             </div>
         </section>
 
-        <div class="space-y-6 self-start">
+        <div class="space-y-6 self-start lg:self-stretch">
             @include('admin._sidebar')
         </div>
     </div>
