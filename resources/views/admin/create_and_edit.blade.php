@@ -22,7 +22,7 @@
                 @include('error.error')
 
                 @if($topic->id)
-                    <form action="{{ route('admin.update', $topic->id)}}" method="post" accept-charset="UTF-8"
+                    <form action="{{ route('admin.topics.update', $topic->id)}}" method="post" accept-charset="UTF-8"
                           enctype="multipart/form-data" class="space-y-6">
                         <input type="hidden" name="_method" value="put">
                         @else

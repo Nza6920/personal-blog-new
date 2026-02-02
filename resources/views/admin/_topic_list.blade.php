@@ -22,10 +22,10 @@
                         </div>
 
                         <div class="flex flex-wrap items-center gap-3">
-                            <flux:button href="{{ route('admin.edit', $topic->id) }}" variant="outline" size="sm">
+                            <flux:button href="{{ route('admin.topics.edit', $topic->id) }}" variant="outline" size="sm">
                                 编辑
                             </flux:button>
-                            <form action="{{ route('admin.destroy', $topic->id) }}" method="post">
+                            <form action="{{ route('admin.topics.destroy', $topic->id) }}" method="post">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <flux:button type="submit" variant="danger" size="sm">
