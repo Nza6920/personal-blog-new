@@ -85,12 +85,13 @@
 
         .home-search-panel {
             position: fixed;
-            right: 20px;
-            bottom: 80px;
+            top: 33%;
+            left: 67%;
+            transform: translate(-50%, -50%);
             z-index: 1000;
             background: rgba(0, 0, 0, 0.75);
             border-radius: 6px;
-            padding: 8px 10px;
+            padding: 16px 20px;
             display: none;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
@@ -107,12 +108,12 @@
         }
 
         .home-search-panel input[type="search"] {
-            width: 200px;
+            width: 480px;
             background: transparent;
             border: 0;
             color: #fff;
             outline: none;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         .home-search-panel button {
@@ -121,7 +122,7 @@
             color: #fff;
             cursor: pointer;
             padding: 0;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         .home-search-panel ::placeholder {
@@ -187,6 +188,23 @@
                     $searchPanel.removeClass('is-open').attr('aria-hidden', 'true');
                 }
             });
+
+            $(document).on('keydown', function (event) {
+                const target = event.target;
+                const isTypingField = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+                if (isTypingField) {
+                    return;
+                }
+
+                if (event.key === '/' || (event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey))) {
+                    event.preventDefault();
+                    if (!$searchPanel.hasClass('is-open')) {
+                        $searchPanel.addClass('is-open').attr('aria-hidden', 'false');
+                    }
+                    $searchInput.focus();
+                    $searchInput.select();
+                }
+            });
         });
     </script>
 @endsection
@@ -247,7 +265,7 @@
 
     <div class="home-search-panel" aria-hidden="true">
         <form method="GET" action="{{ route('home.show') }}" role="search">
-            <input type="search" name="q" placeholder="搜索文章..." autocomplete="off">
+            <input type="search" name="keyword" placeholder="搜索文章" autocomplete="off" value="{{ $search ?? '' }}">
             <button type="submit" aria-label="Search">
                 <i class="icon-search" aria-hidden="true"></i>
             </button>

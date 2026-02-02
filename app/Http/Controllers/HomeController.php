@@ -7,10 +7,25 @@ use App\Models\Topic;
 
 class HomeController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        $topics = Topic::with(['user'])->latest('id')->paginate(10);
+        $search = trim((string) $request->input('keyword', ''));
+        $topicsQuery = Topic::with(['user'])->latest('id');
 
-        return view('home', ['topics' => $topics]);
+        if ($search !== '') {
+            $topicsQuery->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%");
+            });
+        }
+
+        $topics = $topicsQuery->paginate(10)->appends([
+            'keyword' => $search,
+        ]);
+
+        return view('home', [
+            'topics' => $topics,
+            'search' => $search,
+        ]);
     }
 }
