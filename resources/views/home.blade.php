@@ -82,6 +82,51 @@
             background: transparent;
             border-color: rgba(255, 255, 255, 0.08);
         }
+
+        .home-search-panel {
+            position: fixed;
+            right: 20px;
+            bottom: 80px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 6px;
+            padding: 8px 10px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .home-search-panel.is-open {
+            display: inline-flex;
+        }
+
+        .home-search-panel form {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .home-search-panel input[type="search"] {
+            width: 200px;
+            background: transparent;
+            border: 0;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .home-search-panel button {
+            background: transparent;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+            padding: 0;
+            font-size: 16px;
+        }
+
+        .home-search-panel ::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
     </style>
 @endsection
 
@@ -109,6 +154,38 @@
                 const next = isDark ? 'light' : 'dark';
                 localStorage.setItem(storageKey, next);
                 applyTheme(next);
+            });
+
+            const $searchToggle = $('.js-search-toggle');
+            const $searchPanel = $('.home-search-panel');
+            const $searchInput = $searchPanel.find('input[type="search"]');
+
+            $searchToggle.on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $searchPanel.toggleClass('is-open');
+                const isOpen = $searchPanel.hasClass('is-open');
+                $searchPanel.attr('aria-hidden', isOpen ? 'false' : 'true');
+                if (isOpen) {
+                    $searchInput.focus();
+                    $searchInput.select();
+                }
+            });
+
+            $searchPanel.on('click', function (event) {
+                event.stopPropagation();
+            });
+
+            $(document).on('click', function () {
+                if ($searchPanel.hasClass('is-open')) {
+                    $searchPanel.removeClass('is-open').attr('aria-hidden', 'true');
+                }
+            });
+
+            $(document).on('keydown', function (event) {
+                if (event.key === 'Escape' && $searchPanel.hasClass('is-open')) {
+                    $searchPanel.removeClass('is-open').attr('aria-hidden', 'true');
+                }
             });
         });
     </script>
@@ -168,8 +245,16 @@
         </div>
     </div>
 
+    <div class="home-search-panel" aria-hidden="true">
+        <form method="GET" action="{{ route('home.show') }}" role="search">
+            <input type="search" name="q" placeholder="搜索文章..." autocomplete="off">
+            <button type="submit" aria-label="Search">
+                <i class="icon-search" aria-hidden="true"></i>
+            </button>
+        </form>
+    </div>
     <div class="gototop gototop--search js-top">
-        <a href="#" class="js-gotop"><i class="icon-search"></i></a>
+        <a href="#" class="js-search-toggle" aria-label="Toggle search"><i class="icon-search"></i></a>
     </div>
     <div class="gototop js-top">
         <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
