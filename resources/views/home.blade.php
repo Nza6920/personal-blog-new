@@ -168,6 +168,9 @@
         </div>
     </div>
 
+    <div class="gototop gototop--search js-top">
+        <a href="#" class="js-gotop"><i class="icon-search"></i></a>
+    </div>
     <div class="gototop js-top">
         <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
     </div>

@@ -9160,6 +9160,12 @@ figure {
   outline: none;
 }
 
+.gototop--search {
+  bottom: 20px;
+  right: 80px;
+  left: auto;
+}
+
 .fh5co-nav-toggle {
   width: 25px;
   height: 25px;
