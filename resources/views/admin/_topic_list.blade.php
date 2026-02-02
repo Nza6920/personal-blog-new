@@ -25,13 +25,37 @@
                             <flux:button href="{{ route('admin.topics.edit', $topic->id) }}" variant="outline" size="sm">
                                 编辑
                             </flux:button>
-                            <form action="{{ route('admin.topics.destroy', $topic->id) }}" method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <flux:button type="submit" variant="danger" size="sm">
+                            <flux:modal.trigger name="delete-topic-{{ $topic->id }}">
+                                <flux:button type="button" variant="danger" size="sm">
                                     删除
                                 </flux:button>
-                            </form>
+                            </flux:modal.trigger>
+                            <flux:modal name="delete-topic-{{ $topic->id }}" dismissible="false">
+                                <div class="space-y-4">
+                                    <div>
+                                        <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
+                                            确认删除这篇文章？
+                                        </h2>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                                            删除后无法恢复，请谨慎操作。
+                                        </p>
+                                    </div>
+                                    <div class="flex justify-end gap-2">
+                                        <flux:modal.close>
+                                            <flux:button type="button" variant="ghost" size="sm">
+                                                取消
+                                            </flux:button>
+                                        </flux:modal.close>
+                                        <form action="{{ route('admin.topics.destroy', $topic->id) }}" method="post">
+                                            {{ csrf_field() }}
+                                            {{ method_field('DELETE') }}
+                                            <flux:button type="submit" variant="danger" size="sm">
+                                                删除
+                                            </flux:button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </flux:modal>
                         </div>
                     </div>
                 </div>
