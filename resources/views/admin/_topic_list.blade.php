@@ -7,7 +7,7 @@
                     <img class="h-16 w-16 rounded-xl object-cover ring-1 ring-slate-200 dark:ring-slate-700"
                          src="{{ $topic->user->avatar }}" alt="{{ $topic->user->name }}">
                     <div class="flex-1 space-y-3">
-                        <a href="{{ route('topics.show', $topic) }}"
+                        <a href="{{ route('admin.topics.show', $topic) }}"
                            class="text-lg font-semibold text-slate-900 transition hover:text-slate-700 dark:text-white dark:hover:text-slate-200">
                             {{ $topic->title }}
                         </a>
@@ -19,10 +19,28 @@
                             </span>
                             <span class="text-slate-300 dark:text-slate-600">|</span>
                             <span>{{ $topic->created_at->diffForHumans() }}</span>
+                            <span class="text-slate-300 dark:text-slate-600">|</span>
+                            @if ($topic->is_published)
+                                <span class="text-emerald-600 dark:text-emerald-400">
+                                    已发布
+                                </span>
+                            @else
+                                <span class="text-red-600 dark:text-red-400">
+                                    未发布
+                                </span>
+                            @endif
                         </div>
 
                         <div class="flex flex-wrap items-center gap-3">
-                            <flux:button href="{{ route('admin.topics.edit', $topic->id) }}" variant="outline" size="sm">
+                            <form action="{{ route('admin.topics.publish', $topic->id) }}" method="post">
+                                {{ csrf_field() }}
+                                {{ method_field('PATCH') }}
+                                <flux:button type="submit" variant="outline" size="sm">
+                                    {{ $topic->is_published ? '取消发布' : '发布' }}
+                                </flux:button>
+                            </form>
+                            <flux:button href="{{ route('admin.topics.edit', $topic->id) }}" variant="outline"
+                                         size="sm">
                                 编辑
                             </flux:button>
                             <flux:modal.trigger name="delete-topic-{{ $topic->id }}">

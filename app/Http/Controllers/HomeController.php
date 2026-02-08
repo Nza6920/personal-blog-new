@@ -9,8 +9,11 @@ class HomeController extends Controller
 {
     public function show(Request $request)
     {
-        $search = trim((string) $request->input('keyword', ''));
-        $topicsQuery = Topic::with(['user'])->latest('id');
+        $search = trim((string)$request->input('keyword', ''));
+        $topicsQuery = Topic::query()
+            ->published()
+            ->with(['user'])
+            ->latest('id');
 
         if ($search !== '') {
             $topicsQuery->where(function ($query) use ($search) {

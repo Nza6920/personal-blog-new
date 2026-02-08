@@ -16,7 +16,7 @@ class GenerateSitemap
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
                     ->setPriority(1.0)
             )
-            ->add(Topic::query()->latest('id')->get())
+            ->add(Topic::query()->published()->latest('id')->get())
             ->writeToFile($path);
     }
 }

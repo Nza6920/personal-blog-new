@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Feed\Feedable;
@@ -14,12 +15,18 @@ class Topic extends Model implements Feedable, Sitemapable
     use HasFactory;
     use Traits\HashIdHelper;
 
-    protected $fillable = ['title', 'body', 'body_type'];
+    protected $fillable = ['title', 'body', 'body_type', 'is_published'];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'is_published' => 'boolean',
         'updated_at' => 'datetime',
     ];
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('is_published', true);
+    }
 
     public function user()
     {
@@ -29,17 +36,18 @@ class Topic extends Model implements Feedable, Sitemapable
     public function toFeedItem(): FeedItem
     {
         return FeedItem::create()
-            ->id((string) $this->id)
+            ->id((string)$this->id)
             ->title($this->title)
             ->summary(make_excerpt(clean($this->body), 200))
             ->updated($this->updated_at ?? $this->created_at)
             ->link(route('topics.show', $this))
-            ->authorName((string) optional($this->user)->name);
+            ->authorName((string)optional($this->user)->name);
     }
 
     public static function getFeedItems()
     {
         return static::query()
+            ->published()
             ->with('user')
             ->latest('id')
             ->limit(20)

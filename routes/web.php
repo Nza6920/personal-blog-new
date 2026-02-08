@@ -30,8 +30,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/profile/password', 'updatePassword')->name('admin.profile.password');
         Route::get('/topics/{topic}', 'edit')->name('admin.topics.edit');
         Route::put('/topics/{topic}', 'update')->name('admin.topics.update');
+        Route::patch('/topics/{topic}/publish', 'updatePublishStatus')->name('admin.topics.publish');
         Route::post('/upload_image', 'uploadImage')->name('admin.upload_image');
     });
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/topics/{topic}/show', [TopicsController::class, 'show'])->name('admin.topics.show');
+    });
+
     Route::prefix('admin')->group(function () {
         Route::delete('/logout', [SessionsController::class, 'destroy'])->name('admin.logout');
     });

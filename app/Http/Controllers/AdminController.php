@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\Topics\CreateTopic;
 use App\Actions\Topics\DeleteTopic;
+use App\Actions\Topics\PublishTopic;
+use App\Actions\Topics\UnpublishTopic;
 use App\Actions\Topics\UpdateTopic;
 use App\Actions\Users\UpdateUserPassword;
 use App\Actions\Users\UpdateUserProfile;
@@ -19,7 +21,7 @@ class AdminController extends Controller
 {
     public function show(Request $request)
     {
-        $search = trim((string) $request->input('search', ''));
+        $search = trim((string)$request->input('search', ''));
         $topicsQuery = $request->user()->topics()->latest('id')->with(['user']);
 
         if ($search !== '') {
@@ -146,5 +148,18 @@ class AdminController extends Controller
         );
 
         return redirect()->route('admin.show')->with('success', '更新成功！');
+    }
+
+    public function updatePublishStatus(Topic $topic, PublishTopic $publishTopic, UnpublishTopic $unpublishTopic)
+    {
+        if ($topic->is_published) {
+            $unpublishTopic->handle($topic);
+
+            return redirect()->back()->with('success', '文章已取消发布');
+        }
+
+        $publishTopic->handle($topic);
+
+        return redirect()->back()->with('success', '文章已发布');
     }
 }

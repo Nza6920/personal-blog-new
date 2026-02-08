@@ -98,6 +98,10 @@
             border-color: rgba(255, 255, 255, 0.08);
         }
 
+        .fh5co-post .fh5co-entry > div h2 {
+            font-weight: 200;
+        }
+
         .home-search-panel {
             position: fixed;
             top: 33%;

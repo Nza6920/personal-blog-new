@@ -14,6 +14,7 @@ class CreateTopic
         $topic = new Topic;
         $topic->fill($data);
         $topic->body_type = $topic->body_type ?: 'HTML';
+        $topic->is_published = false;
         $topic->user_id = $user->id;
 
         if ($background && $background->isValid()) {
