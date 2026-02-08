@@ -50,6 +50,12 @@ php artisan key:generate
 php artisan migrate --force
 sudo chown -R www-data:www-data storage bootstrap/cache
 sudo chmod -R 775 storage bootstrap/cache
+
+# 上传目录（避免 mkdir permission denied）
+sudo mkdir -p public/uploads/images
+sudo chown -R www-data:www-data public/uploads
+sudo find public/uploads -type d -exec chmod 775 {} \;
+sudo find public/uploads -type f -exec chmod 664 {} \;
 ```
 如需公开存储目录：
 ```bash
@@ -154,7 +160,9 @@ sudo crontab -e
 ## 9) 代码更新
 ```bash
 sudo systemctl stop nginx
-sudo git pull <branch>
+
+# 使用部署用户拉代码，避免文件属主变成 root
+git pull origin <branch>
 
 composer install --no-dev --optimize-autoloader
 npm install
