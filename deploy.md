@@ -150,3 +150,22 @@ sudo crontab -e
 ```
 * * * * * cd /var/www/personal-blog && php artisan schedule:run >> /dev/null 2>&1
 ```
+
+## 9) 代码更新
+```bash
+sudo systemctl stop nginx
+sudo git pull <branch>
+
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+
+php artisan migrate --force   # 可选
+php artisan route:clear
+php artisan view:clear
+php artisan optimize
+php artisan queue:restart     # 可选（修改了 Job 相关逻辑时执行）
+
+sudo systemctl start nginx
+sudo systemctl status nginx
+```
