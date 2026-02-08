@@ -22,6 +22,7 @@ Route::prefix('admin')->middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::controller(AdminController::class)->prefix('admin')->group(function () {
         Route::get('/index', 'show')->name('admin.show');
+        Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('admin.logs.index');
         Route::delete('/topics/{topic}', 'destroy')->name('admin.topics.destroy');
         Route::get('/create', 'create')->name('admin.create');
         Route::post('/create', 'store')->name('admin.store');

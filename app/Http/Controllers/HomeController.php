@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function show(Request $request)
     {
-        $search = trim((string)$request->input('keyword', ''));
+        $search = trim((string) $request->input('keyword', ''));
         $topicsQuery = Topic::query()
             ->published()
             ->with(['user'])

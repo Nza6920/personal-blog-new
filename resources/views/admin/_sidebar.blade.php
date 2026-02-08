@@ -7,6 +7,10 @@
         新建文章
     </flux:button>
 
+    <flux:button href="{{ route('admin.logs.index') }}" variant="primary" color="slate" class="w-full">
+        日志查看
+    </flux:button>
+
     <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-950/40 dark:text-slate-400">
         这里可以放草稿、快捷入口或统计信息。
     </div>

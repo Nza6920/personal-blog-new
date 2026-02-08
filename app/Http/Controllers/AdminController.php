@@ -21,7 +21,7 @@ class AdminController extends Controller
 {
     public function show(Request $request)
     {
-        $search = trim((string)$request->input('search', ''));
+        $search = trim((string) $request->input('search', ''));
         $topicsQuery = $request->user()->topics()->latest('id')->with(['user']);
 
         if ($search !== '') {

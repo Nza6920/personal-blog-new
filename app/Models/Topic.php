@@ -36,12 +36,12 @@ class Topic extends Model implements Feedable, Sitemapable
     public function toFeedItem(): FeedItem
     {
         return FeedItem::create()
-            ->id((string)$this->id)
+            ->id((string) $this->id)
             ->title($this->title)
             ->summary(make_excerpt(clean($this->body), 200))
             ->updated($this->updated_at ?? $this->created_at)
             ->link(route('topics.show', $this))
-            ->authorName((string)optional($this->user)->name);
+            ->authorName((string) optional($this->user)->name);
     }
 
     public static function getFeedItems()
