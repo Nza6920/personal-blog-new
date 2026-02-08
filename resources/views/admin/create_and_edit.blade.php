@@ -87,6 +87,25 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/easymde/easymde.min.css') }}">
     <style>
+        .EasyMDEContainer .editor-toolbar {
+            position: -webkit-sticky;
+            position: sticky;
+            top: var(--editor-toolbar-offset, 0px);
+            z-index: 40;
+            background-color: #ffffff;
+        }
+
+        .EasyMDEContainer .editor-toolbar.fullscreen {
+            position: fixed;
+            top: 0;
+            z-index: 70;
+        }
+
+        .EasyMDEContainer .CodeMirror-fullscreen,
+        .EasyMDEContainer .editor-preview-side {
+            z-index: 69;
+        }
+
         .easymde-dark .editor-toolbar {
             background-color: #0f172a;
             border-color: #1f2937;
@@ -131,22 +150,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var editorElement = document.getElementById('editor');
+            const editorElement = document.getElementById('editor');
 
             if (!editorElement) {
                 return;
             }
 
-        var easyMde = new EasyMDE({
+        const easyMde = new EasyMDE({
             element: editorElement,
             forceSync: true,
             theme: document.documentElement.classList.contains('dark') ? 'easymde-dark' : 'easymde',
             imageUploadFunction: function (file, onSuccess, onError) {
-                    var formData = new FormData();
+                    const formData = new FormData();
                     formData.append('upload_file', file);
                     formData.append('_token', '{{ csrf_token() }}');
 
-                    fetch('{{ route('admin.upload_image') }}', {
+                    fetch("{{ route('admin.upload_image') }}", {
                         method: 'POST',
                         body: formData,
                         headers: {
@@ -169,8 +188,8 @@
                 }
             });
 
-        var applyEditorTheme = function () {
-            var container = easyMde.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+        const applyEditorTheme = function () {
+            const container = easyMde.codemirror.getWrapperElement().closest('.EasyMDEContainer');
             if (!container) {
                 return;
             }
@@ -183,10 +202,23 @@
             }
         };
 
-            applyEditorTheme();
+        const setToolbarOffset = function () {
+            const container = easyMde.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+            if (!container) {
+                return;
+            }
 
-            var observer = new MutationObserver(applyEditorTheme);
+            const header = document.querySelector('header');
+            const offset = header ? Math.ceil(header.getBoundingClientRect().height) + 8 : 8;
+            container.style.setProperty('--editor-toolbar-offset', offset + 'px');
+        };
+
+            applyEditorTheme();
+            setToolbarOffset();
+
+            const observer = new MutationObserver(applyEditorTheme);
             observer.observe(document.documentElement, {attributes: true, attributeFilter: ['class']});
+            window.addEventListener('resize', setToolbarOffset);
         });
     </script>
 @stop
