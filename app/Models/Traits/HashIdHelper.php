@@ -11,7 +11,7 @@ trait HashIdHelper
     // 调用 $model->hash_id 时触发
     public function getHashIdAttribute()
     {
-        if (!$this->hashId) {
+        if (! $this->hashId) {
             $this->hashId = Hashids::encode($this->id);
         }
 
@@ -21,11 +21,11 @@ trait HashIdHelper
     // 先将参数 decode 为模型id，再调用父类的 resolveRouteBinding 方法
     public function resolveRouteBinding($value, $field = null)
     {
-        if (!is_numeric($value)){
-          $value = current(Hashids::decode($value));
-          if (!$value) {
-              return;
-          }
+        if (! is_numeric($value)) {
+            $value = current(Hashids::decode($value));
+            if (! $value) {
+                return;
+            }
         }
 
         return parent::resolveRouteBinding($value, $field);

@@ -3,6 +3,10 @@
   use League\CommonMark\MarkdownConverter;
 
   $markdownConverter = new MarkdownConverter(Environment::createCommonMarkEnvironment());
+  $topicTitle = $topic->title . ' | Niu 的个人博客';
+  $topicDescription = make_excerpt(clean($topic->body), 140);
+  $topicUrl = route('topics.show', $topic);
+  $topicImage = $topic->background ?: asset('uploads/images/system/niu.png');
 @endphp
   <!DOCTYPE HTML>
 <html>
@@ -10,9 +14,21 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ $topicDescription }}">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ $topicTitle }}">
+  <meta property="og:description" content="{{ $topicDescription }}">
+  <meta property="og:url" content="{{ $topicUrl }}">
+  <meta property="og:image" content="{{ $topicImage }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ $topicTitle }}">
+  <meta name="twitter:description" content="{{ $topicDescription }}">
+  <meta name="twitter:image" content="{{ $topicImage }}">
+  <link rel="canonical" href="{{ $topicUrl }}">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Niu的个人博客! - 内容</title>
+  <title>{{ $topicTitle }}</title>
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/icomoon.css">
   <link rel="stylesheet" href="/css/animate.css">

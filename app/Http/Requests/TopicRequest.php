@@ -6,26 +6,25 @@ class TopicRequest extends Request
 {
     public function rules()
     {
-        switch($this->method())
-        {
+        switch ($this->method()) {
             // CREATE
             case 'POST':
-            // UPDATE
+                // UPDATE
             case 'PUT':
             case 'PATCH':
-            {
+
                 return [
-                    'title'       => 'required|min:2',
-                    'body'        => 'required|min:3',
-                    'body_type'   => 'nullable|in:MARKDOWN,HTML',
+                    'title' => 'required|min:2',
+                    'body' => 'required|min:3',
+                    'body_type' => 'nullable|in:MARKDOWN,HTML',
                 ];
-            }
+
             case 'GET':
             case 'DELETE':
             default:
-            {
+
                 return [];
-            };
+                ;
         }
     }
 

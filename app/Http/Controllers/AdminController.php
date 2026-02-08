@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\Topics\CreateTopic;
 use App\Actions\Topics\DeleteTopic;
 use App\Actions\Topics\UpdateTopic;
-use App\Actions\Users\UpdateUserProfile;
 use App\Actions\Users\UpdateUserPassword;
+use App\Actions\Users\UpdateUserProfile;
 use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
@@ -85,6 +85,7 @@ class AdminController extends Controller
     {
         $deleteTopic->handle($topic);
         session()->flash('success', '文章已成功删除！');
+
         return redirect()->back();
     }
 
@@ -110,9 +111,9 @@ class AdminController extends Controller
     {
         // 鍒濆鍖栬繑鍥炴暟鎹紝榛樿鏄け璐ョ殑
         $data = [
-            'success'   => false,
-            'msg'       => '上传失败！',
-            'file_path' => ''
+            'success' => false,
+            'msg' => '上传失败！',
+            'file_path' => '',
         ];
 
         $file = $request->file('upload_file');
@@ -120,10 +121,11 @@ class AdminController extends Controller
             $result = $uploader->save($file, 'topics', Auth::id(), 1024);
             if ($result) {
                 $data['file_path'] = $result['path'];
-                $data['msg']       = "上传成功！";
-                $data['success']   = true;
+                $data['msg'] = '上传成功！';
+                $data['success'] = true;
             }
         }
+
         return $data;
     }
 
@@ -142,7 +144,7 @@ class AdminController extends Controller
             $request->file('background'),
             $uploader
         );
+
         return redirect()->route('admin.show')->with('success', '更新成功！');
     }
 }
-

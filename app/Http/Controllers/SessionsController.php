@@ -20,8 +20,9 @@ class SessionsController extends Controller
             'password' => $request->password,
         ];
 
-        if (!$loginUser->handle($credentials)) {
+        if (! $loginUser->handle($credentials)) {
             session()->flash('danger', '抱歉，邮箱或密码不匹配。');
+
             return redirect()->back();
         }
 
@@ -32,6 +33,7 @@ class SessionsController extends Controller
     {
         $logoutUser->handle();
         session()->flash('success', '您已成功退出！');
+
         return redirect('admin');
     }
 }

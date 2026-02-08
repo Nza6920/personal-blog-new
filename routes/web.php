@@ -7,6 +7,8 @@ use App\Http\Controllers\TopicsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'show'])->name('home.show');
+Route::feeds();
+
 Route::get('/home', function () {
     return redirect()->route('admin.show');
 });
