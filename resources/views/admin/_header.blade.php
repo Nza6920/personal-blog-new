@@ -18,8 +18,7 @@
                         <img src="{{ Auth::user()->avatar }}" class="h-7 w-7 rounded-md border border-slate-200 object-cover dark:border-slate-700" alt="用户头像">
                         <span class="font-medium">{{ Auth::user()->name }}</span>
                     </a>
-                    <form action="{{ route('admin.logout') }}" method="post">
-                        @method('DELETE')
+                    <form action="{{ route('logout') }}" method="post">
                         @csrf
                         <flux:button type="submit" variant="ghost" size="sm">
                             退出

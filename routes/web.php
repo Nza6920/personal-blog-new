@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\TopicsController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,10 +13,9 @@ Route::get('/home', function () {
 });
 Route::get('/topics/{topic}', [TopicsController::class, 'show'])->name('topics.show');
 
-Route::prefix('admin')->middleware('guest')->group(function () {
-    Route::get('/', [SessionsController::class, 'show'])->name('sessions.show');
-    Route::post('/', [SessionsController::class, 'store'])->name('login');
-});
+Route::middleware('guest')->get('/admin', function () {
+    return redirect()->route('login');
+})->name('sessions.show');
 
 Route::middleware('auth')->group(function () {
     Route::controller(AdminController::class)->prefix('admin')->group(function () {
@@ -39,7 +37,4 @@ Route::middleware('auth')->group(function () {
         Route::get('/topics/{topic}/show', [TopicsController::class, 'show'])->name('admin.topics.show');
     });
 
-    Route::prefix('admin')->group(function () {
-        Route::delete('/logout', [SessionsController::class, 'destroy'])->name('admin.logout');
-    });
 });
