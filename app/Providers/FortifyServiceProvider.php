@@ -36,8 +36,12 @@ class FortifyServiceProvider extends ServiceProvider
             return view('sessions.login');
         });
 
+        Fortify::twoFactorChallengeView(function () {
+            return view('sessions.two-factor-challenge');
+        });
+
         Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('email', $request->string('username'))->first();
+            $user = User::where('email', $request->string(Fortify::username()))->first();
 
             if ($user && Hash::check($request->input('password'), $user->password)) {
                 return $user;

@@ -1,5 +1,7 @@
 <?php
 
+use Laravel\Fortify\Features;
+
 return [
 
     /*
@@ -43,7 +45,7 @@ return [
     |
     */
 
-    'username' => 'username',
+    'username' => 'email',
 
     'email' => 'email',
 
@@ -141,6 +143,11 @@ return [
     |
     */
 
-    'features' => [],
+    'features' => [
+        Features::twoFactorAuthentication([
+            'confirm' => false,
+            'confirmPassword' => false,
+        ]),
+    ],
 
 ];

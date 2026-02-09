@@ -22,12 +22,12 @@ class FortifyAuthenticationTest extends TestCase
         $response->assertViewIs('sessions.login');
     }
 
-    public function test_login_requires_username_and_password_fields(): void
+    public function test_login_requires_email_and_password_fields(): void
     {
         $response = $this->from(route('login'))->post(route('login.store'), []);
 
         $response->assertRedirect(route('login'));
-        $response->assertSessionHasErrors(['username', 'password']);
+        $response->assertSessionHasErrors(['email', 'password']);
         $this->assertGuest();
     }
 

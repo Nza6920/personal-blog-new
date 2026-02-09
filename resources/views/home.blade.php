@@ -1,15 +1,15 @@
 @extends('layouts.app')
-@section('title', 'Niu的个人博客! - 首页')
+@section('title', 'Niu的个人博客 - 首页')
 
 @section('meta')
     <meta name="description" content="Niu 的个人博客首页，分享技术文章与思考。">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Niu的个人博客! - 首页">
+    <meta property="og:title" content="Niu的个人博客 - 首页">
     <meta property="og:description" content="Niu 的个人博客首页，分享技术文章与思考。">
     <meta property="og:url" content="{{ route('home.show') }}">
     <meta property="og:image" content="{{ asset('uploads/images/system/niu.png') }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Niu的个人博客! - 首页">
+    <meta name="twitter:title" content="Niu的个人博客 - 首页">
     <meta name="twitter:description" content="Niu 的个人博客首页，分享技术文章与思考。">
     <meta name="twitter:image" content="{{ asset('uploads/images/system/niu.png') }}">
     <link rel="canonical" href="{{ route('home.show') }}">
