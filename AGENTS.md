@@ -114,6 +114,7 @@ Agent-focused conventions for this repository. Keep changes small, consistent, a
 - Prefer Livewire + Flux for interactive UI over ad-hoc JS.
 - Use small, focused JS in `resources/js` for unavoidable client-only behavior.
 - Vite inputs are `resources/css/app.css` and `resources/js/app.js`.
+- For frontend changes, always evaluate i18n impact: avoid hardcoded user-facing text in views/components/JS, prefer translation keys, and update locale files (`lang/en`, `lang/zh_CN`) in the same change.
 
 ## Testing Guidelines
 - Feature tests cover HTTP behavior, auth, middleware, and responses.

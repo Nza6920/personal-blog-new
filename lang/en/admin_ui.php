@@ -117,6 +117,8 @@ return [
         'background_upload_hint' => 'Common image formats are supported. Save to apply the selected background image.',
         'background_preview_alt' => 'Background preview',
         'save' => 'Save',
+        'back_to_top' => 'Back to top',
+        'back_to_top_aria' => 'Scroll back to top',
         'image_upload_failed' => 'Image upload failed.',
     ],
 ];

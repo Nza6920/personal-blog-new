@@ -117,6 +117,8 @@ return [
         'background_upload_hint' => '支持常见图片格式，选择文件后保存即可更新背景图。',
         'background_preview_alt' => '背景预览',
         'save' => '保存',
+        'back_to_top' => '回到顶部',
+        'back_to_top_aria' => '一键回到顶部',
         'image_upload_failed' => '图片上传失败。',
     ],
 ];
