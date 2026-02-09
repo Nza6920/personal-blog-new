@@ -13,7 +13,7 @@
     'confirmVariant' => 'filled',
     'confirmColor' => null,
     'confirmSize' => 'sm',
-    'cancelLabel' => '取消',
+    'cancelLabel' => __('admin_ui.common.cancel'),
 ])
 
 <flux:modal.trigger :name="$name">

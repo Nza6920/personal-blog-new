@@ -2,7 +2,7 @@
     <div class="mx-auto w-full max-w-6xl px-6 py-4">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <a class="text-lg font-semibold tracking-tight text-slate-900 dark:text-white" href="{{ route('admin.show') }}">
-                博客后台
+                {{ __('admin_ui.header.title') }}
             </a>
 
             <div class="flex flex-wrap items-center gap-3">
@@ -15,17 +15,17 @@
                 </div>
                 <div class="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs leading-none text-slate-700 shadow-xs dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                     <a href="{{ route('admin.profile') }}" class="flex items-center gap-2">
-                        <img src="{{ Auth::user()->avatar }}" class="h-7 w-7 rounded-md border border-slate-200 object-cover dark:border-slate-700" alt="用户头像">
+                        <img src="{{ Auth::user()->avatar }}" class="h-7 w-7 rounded-md border border-slate-200 object-cover dark:border-slate-700" alt="{{ __('admin_ui.header.user_avatar_alt') }}">
                         <span class="font-medium">{{ Auth::user()->name }}</span>
                     </a>
                     <x-confirm-modal
                         name="confirm-logout-modal"
-                        title="确认退出登录？"
-                        message="退出后需要重新登录才能进入后台。"
+                        :title="__('admin_ui.header.logout_title')"
+                        :message="__('admin_ui.header.logout_message')"
                         :action="route('logout')"
-                        trigger-label="退出"
+                        :trigger-label="__('admin_ui.header.logout_trigger')"
                         trigger-variant="ghost"
-                        confirm-label="确认退出"
+                        :confirm-label="__('admin_ui.header.logout_confirm')"
                         confirm-variant="danger"
                     />
                 </div>

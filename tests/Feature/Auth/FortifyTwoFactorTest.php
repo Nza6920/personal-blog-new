@@ -29,8 +29,8 @@ class FortifyTwoFactorTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin.profile'));
 
         $response->assertOk();
-        $response->assertSee('双因素认证');
-        $response->assertSee('启用双因素认证');
+        $response->assertSee(__('admin_ui.profile.two_factor.title'));
+        $response->assertSee(__('admin_ui.profile.modals.enable_two_factor.trigger'));
     }
 
     public function test_profile_page_shows_recovery_codes_when_two_factor_is_enabled(): void
@@ -51,7 +51,7 @@ class FortifyTwoFactorTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin.profile'));
 
         $response->assertOk();
-        $response->assertSee('关闭双因素认证');
+        $response->assertSee(__('admin_ui.profile.modals.disable_two_factor.trigger'));
         $response->assertSee('code-alpha');
         $response->assertSee('code-beta');
     }

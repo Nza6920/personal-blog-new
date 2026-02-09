@@ -1,5 +1,5 @@
 ﻿@extends('admin.default')
-@section('title', '所有文章')
+@section('title', __('admin_ui.index.page_title'))
 @section('content')
     <div class="grid mt-6 gap-6 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
         <section class="space-y-6">
@@ -14,7 +14,7 @@
                             value="{{ $search }}"
                             kbd="⌘K/Ctrl+K"
                             icon="magnifying-glass"
-                            placeholder="Search..."
+                            :placeholder="__('admin_ui.index.search_placeholder')"
                         />
                     </form>
                 </div>

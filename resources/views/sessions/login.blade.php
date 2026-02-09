@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Niu Blog - Admin Login</title>
+    <title>{{ __('auth_ui.login.page_title') }}</title>
     <link rel="icon" href="{{ asset('uploads/images/system/niu.png') }}" type="image/x-icon">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @fluxAppearance
@@ -16,8 +16,8 @@
         <div class="relative flex min-h-screen items-center justify-center px-6 py-12">
             <div class="w-full max-w-md space-y-8 rounded-2xl border border-slate-800/60 bg-slate-900/70 p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.9)] backdrop-blur">
                 <div class="space-y-2 text-center">
-                    <h1 class="text-3xl font-semibold text-slate-100">Welcome back</h1>
-                    <p class="text-sm text-slate-400">Sign in to continue managing your blog.</p>
+                    <h1 class="text-3xl font-semibold text-slate-100">{{ __('auth_ui.login.heading') }}</h1>
+                    <p class="text-sm text-slate-400">{{ __('auth_ui.login.subheading') }}</p>
                 </div>
 
                 @include('error.error')
@@ -30,8 +30,8 @@
                         id="email"
                         name="email"
                         type="email"
-                        label="Email"
-                        placeholder="Enter your email"
+                        :label="__('auth_ui.login.email_label')"
+                        :placeholder="__('auth_ui.login.email_placeholder')"
                         autocomplete="email"
                         required
                     />
@@ -40,19 +40,19 @@
                         id="password"
                         name="password"
                         type="password"
-                        label="Password"
-                        placeholder="Enter your password"
+                        :label="__('auth_ui.login.password_label')"
+                        :placeholder="__('auth_ui.login.password_placeholder')"
                         autocomplete="current-password"
                         required
                     />
 
                     <button type="submit" class="w-full rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-white">
-                        Sign in
+                        {{ __('auth_ui.login.submit') }}
                     </button>
                 </form>
 
                 <div class="text-center text-xs text-slate-500">
-                    Tip: Use your admin credentials to access the dashboard.
+                    {{ __('auth_ui.login.tip') }}
                 </div>
             </div>
         </div>

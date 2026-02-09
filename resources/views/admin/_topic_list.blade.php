@@ -22,11 +22,11 @@
                             <span class="text-slate-300 dark:text-slate-600">|</span>
                             @if ($topic->is_published)
                                 <span class="text-emerald-600 dark:text-emerald-400">
-                                    已发布
+                                    {{ __('admin_ui.topic.published') }}
                                 </span>
                             @else
                                 <span class="text-red-600 dark:text-red-400">
-                                    未发布
+                                    {{ __('admin_ui.topic.unpublished') }}
                                 </span>
                             @endif
                         </div>
@@ -36,22 +36,22 @@
                                 {{ csrf_field() }}
                                 {{ method_field('PATCH') }}
                                 <flux:button type="submit" variant="outline" size="sm">
-                                    {{ $topic->is_published ? '取消发布' : '发布' }}
+                                    {{ $topic->is_published ? __('admin_ui.topic.unpublish_action') : __('admin_ui.topic.publish_action') }}
                                 </flux:button>
                             </form>
                             <flux:button href="{{ route('admin.topics.edit', $topic->id) }}" variant="outline"
                                          size="sm">
-                                编辑
+                                {{ __('admin_ui.topic.edit') }}
                             </flux:button>
                             <x-confirm-modal
                                 :name="'delete-topic-'.$topic->id"
-                                title="确认删除这篇文章？"
-                                message="删除后无法恢复，请谨慎操作。"
+                                :title="__('admin_ui.topic.delete_title')"
+                                :message="__('admin_ui.topic.delete_message')"
                                 :action="route('admin.topics.destroy', $topic->id)"
                                 method="DELETE"
-                                trigger-label="删除"
+                                :trigger-label="__('admin_ui.topic.delete')"
                                 trigger-variant="danger"
-                                confirm-label="删除"
+                                :confirm-label="__('admin_ui.topic.delete')"
                                 confirm-variant="danger"
                             />
                         </div>
@@ -63,6 +63,6 @@
 @else
     <div
         class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-10 text-center text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-400">
-        暂无数据 ~_~
+        {{ __('admin_ui.topic.empty') }}
     </div>
 @endif

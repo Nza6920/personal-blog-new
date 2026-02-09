@@ -1,4 +1,6 @@
-﻿@extends('admin.default')
+@extends('admin.default')
+
+@section('title', $topic->id ? __('admin_ui.editor.edit_topic') : __('admin_ui.editor.new_topic'))
 
 @section('content')
 <div class="mx-auto max-w-3xl mt-3">
@@ -7,14 +9,14 @@
                 <div>
                     <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
                         @if($topic->id)
-                            编辑话题
+                            {{ __('admin_ui.editor.edit_topic') }}
                         @else
-                            新建话题
+                            {{ __('admin_ui.editor.new_topic') }}
                         @endif
                     </h2>
                 </div>
                 <flux:button href="{{ route('admin.show') }}" size="sm">
-                    返回列表
+                    {{ __('admin_ui.editor.back_list') }}
                 </flux:button>
             </div>
 
@@ -35,8 +37,8 @@
                                 <flux:input
                                     id="title"
                                     name="title"
-                                    label="标题"
-                                    placeholder="请填写标题"
+                                    :label="__('admin_ui.editor.title_label')"
+                                    :placeholder="__('admin_ui.editor.title_placeholder')"
                                     value="{{ old('title', $topic->title ) }}"
                                     required
                                 />
@@ -44,38 +46,52 @@
                                 <flux:textarea
                                     id="editor"
                                     name="body"
-                                    label="内容"
+                                    :label="__('admin_ui.editor.body_label')"
                                     rows="10"
-                                    placeholder="请输入至少三个字符的内容。"
+                                    :placeholder="__('admin_ui.editor.body_placeholder')"
                                     required
                                 >{{ old('body', $topic->body ) }}</flux:textarea>
 
-                                <flux:select name="body_type" id="body_type" label="文本类型">
+                                <flux:select name="body_type" id="body_type" :label="__('admin_ui.editor.body_type_label')">
                                     <option
                                         value="MARKDOWN" @selected(old('body_type', $topic->body_type ?? 'MARKDOWN') === 'MARKDOWN')>
-                                        MARKDOWN
+                                        {{ __('admin_ui.editor.body_type_markdown') }}
                                     </option>
                                     <option
                                         value="HTML" @selected(old('body_type', $topic->body_type ?? 'MARKDOWN') === 'HTML')>
-                                        HTML
+                                        {{ __('admin_ui.editor.body_type_html') }}
                                     </option>
                                 </flux:select>
 
-                                <div class="space-y-2">
+                                <div class="space-y-2" x-data="{ selectedBackgroundName: '{{ __('admin_ui.editor.background_upload_no_file') }}' }">
                                     <label for="background"
-                                           class="text-sm font-medium text-slate-700 dark:text-slate-200">背景图片</label>
-                                    <input id="background" type="file" name="background"
-                                           class="block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-900 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-slate-700 dark:text-slate-300 dark:file:bg-white dark:file:text-slate-900 dark:hover:file:bg-slate-200">
+                                           class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('admin_ui.editor.background_label') }}</label>
+                                    <input
+                                        id="background"
+                                        type="file"
+                                        name="background"
+                                        class="hidden"
+                                        x-ref="backgroundInput"
+                                        aria-label="{{ __('admin_ui.editor.background_label') }}"
+                                        x-on:change="selectedBackgroundName = $event.target.files.length ? $event.target.files[0].name : '{{ __('admin_ui.editor.background_upload_no_file') }}'"
+                                    >
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <flux:button type="button" size="sm" variant="filled" color="slate" x-on:click="$refs.backgroundInput.click()">
+                                            {{ __('admin_ui.editor.background_upload_button') }}
+                                        </flux:button>
+                                        <span class="text-xs text-slate-500 dark:text-slate-400" x-text="selectedBackgroundName"></span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ __('admin_ui.editor.background_upload_hint') }}</p>
                                     @if($topic->background)
                                         <img
                                             class="h-32 rounded-xl border border-slate-200 object-cover shadow-sm dark:border-slate-800"
-                                            src="{{ $topic->background }}" alt="背景预览">
+                                            src="{{ $topic->background }}" alt="{{ __('admin_ui.editor.background_preview_alt') }}">
                                     @endif
                                 </div>
 
                                 <div class="flex items-center justify-end gap-3">
                                     <flux:button type="submit" variant="primary" color="slate">
-                                        保存
+                                        {{ __('admin_ui.editor.save') }}
                                     </flux:button>
                                 </div>
                             </form>
@@ -179,11 +195,11 @@
                             if (data && data.success && data.file_path) {
                                 onSuccess(data.file_path);
                             } else {
-                                onError((data && data.msg) ? data.msg : 'Image upload failed.');
+                                onError((data && data.msg) ? data.msg : "{{ __('admin_ui.editor.image_upload_failed') }}");
                             }
                         })
                         .catch(function () {
-                            onError('Image upload failed.');
+                            onError("{{ __('admin_ui.editor.image_upload_failed') }}");
                         });
                 }
             });
