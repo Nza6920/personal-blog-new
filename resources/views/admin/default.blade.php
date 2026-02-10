@@ -14,7 +14,7 @@
     @include('admin._header')
 
     <main class="flex-1">
-        <div class="mx-auto w-full max-w-6xl px-6 pb-8 pt-24">
+        <div class="mx-auto w-full max-w-6xl px-6 pb-8 pt-18">
             @include('layouts._message', ['showSession' => true, 'showErrors' => true])
             @yield('content')
         </div>
