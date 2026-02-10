@@ -32,13 +32,18 @@
                         </div>
 
                         <div class="flex flex-wrap items-center gap-3">
-                            <form action="{{ route('admin.topics.publish', $topic->id) }}" method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('PATCH') }}
-                                <flux:button type="submit" variant="outline" size="sm">
-                                    {{ $topic->is_published ? __('admin_ui.topic.unpublish_action') : __('admin_ui.topic.publish_action') }}
-                                </flux:button>
-                            </form>
+                            <x-confirm-modal
+                                :name="'toggle-publish-topic-'.$topic->id"
+                                :title="$topic->is_published ? __('admin_ui.topic.unpublish_title') : __('admin_ui.topic.publish_title')"
+                                :message="$topic->is_published ? __('admin_ui.topic.unpublish_message') : __('admin_ui.topic.publish_message')"
+                                :action="route('admin.topics.publish', $topic->id)"
+                                method="PATCH"
+                                :trigger-label="$topic->is_published ? __('admin_ui.topic.unpublish_action') : __('admin_ui.topic.publish_action')"
+                                trigger-variant="outline"
+                                :confirm-label="$topic->is_published ? __('admin_ui.topic.unpublish_confirm') : __('admin_ui.topic.publish_confirm')"
+                                :confirm-variant="$topic->is_published ? 'danger' : 'primary'"
+                                :confirm-color="$topic->is_published ? null : 'emerald'"
+                            />
                             <flux:button href="{{ route('admin.topics.edit', $topic->id) }}" variant="outline"
                                          size="sm">
                                 {{ __('admin_ui.topic.edit') }}
@@ -66,3 +71,5 @@
         {{ __('admin_ui.topic.empty') }}
     </div>
 @endif
+
+<x-back-to-top-button />
