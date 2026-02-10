@@ -20,7 +20,6 @@
                     <p class="text-sm text-slate-400">{{ __('auth_ui.login.subheading') }}</p>
                 </div>
 
-                @include('error.error')
                 @include('layouts._message')
 
                 <form method="post" action="{{ route('login') }}" id="form_login" class="space-y-5">

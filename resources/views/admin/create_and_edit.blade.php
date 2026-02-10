@@ -21,8 +21,6 @@
             </div>
 
             <div class="mt-6">
-                @include('error.error')
-
                 @if($topic->id)
                     <form action="{{ route('admin.topics.update', $topic->id)}}" method="post" accept-charset="UTF-8"
                           enctype="multipart/form-data" class="space-y-6">

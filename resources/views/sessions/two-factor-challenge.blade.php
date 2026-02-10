@@ -20,7 +20,7 @@
                     <p class="text-sm text-slate-400">{{ __('auth_ui.two_factor.subheading') }}</p>
                 </div>
 
-                @include('error.error')
+                @include('layouts._message', ['showSession' => false, 'showErrors' => true])
 
                 <form method="post" action="{{ url('/two-factor-challenge') }}" class="space-y-5">
                     @csrf

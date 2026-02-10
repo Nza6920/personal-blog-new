@@ -1,9 +1,9 @@
-﻿@extends('admin.default')
+@extends('admin.default')
 @section('title', __('admin_ui.profile.page_title'))
 @section('content')
-    <div class="flex min-h-[calc(100vh-200px)] items-center justify-center">
-        <div class="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            @include('error.error')
+    <div class="flex min-h-[calc(100vh-200px)] items-start justify-center pt-10">
+        <div class="w-full max-w-3xl">
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div class="p-6">
                 <form id="profile-update-form" method="post" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data" class="space-y-6">
                     @csrf
@@ -205,6 +205,7 @@
                         </p>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </div>

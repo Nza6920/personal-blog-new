@@ -3,6 +3,7 @@
 return [
     'common' => [
         'cancel' => '取消',
+        'close' => '关闭',
     ],
 
     'index' => [

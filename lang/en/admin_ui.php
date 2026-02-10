@@ -3,6 +3,7 @@
 return [
     'common' => [
         'cancel' => 'Cancel',
+        'close' => 'Close',
     ],
 
     'index' => [

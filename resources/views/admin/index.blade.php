@@ -1,7 +1,7 @@
 ﻿@extends('admin.default')
 @section('title', __('admin_ui.index.page_title'))
 @section('content')
-    <div class="grid mt-6 gap-6 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
         <section class="space-y-6">
             <div
                 class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
