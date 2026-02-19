@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PortalSetting;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,12 @@ class HomeController extends Controller
             'keyword' => $search,
         ]);
 
+        $homeBio = PortalSetting::query()->value('home_bio') ?? PortalSetting::defaultBio();
+
         return view('home', [
             'topics' => $topics,
             'search' => $search,
+            'homeBio' => $homeBio,
         ]);
     }
 }

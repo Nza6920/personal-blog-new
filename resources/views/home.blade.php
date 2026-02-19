@@ -246,13 +246,12 @@
         </nav>
 
         <div class="sentence">
-            {{-- <h2 >白天搬砖,晚上砌梦想.</h2> --}}
-            <h1>Stay hungry, Stay foolish.</h1>
+            <h1>{{ $homeBio }}</h1>
         </div>
 
         <div class="featured">
-            <span>Hi:</span>
-            <h1><a href="https://github.com/Nza6920">I'm Niu</a></h1>
+            <span>welcome</span>
+            <span><a href="https://github.com/Nza6920">see what I build →</a></span>
         </div>
     </div>
     <div id="page">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Portal\UpdatePortalBio;
 use App\Actions\Topics\CreateTopic;
 use App\Actions\Topics\DeleteTopic;
 use App\Actions\Topics\PublishTopic;
@@ -11,6 +12,8 @@ use App\Actions\Users\UpdateUserPassword;
 use App\Actions\Users\UpdateUserProfile;
 use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\TopicRequest;
+use App\Models\PortalBioHistory;
+use App\Models\PortalSetting;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +46,32 @@ class AdminController extends Controller
     public function profile(Request $request)
     {
         return view('admin.profile', ['user' => $request->user()]);
+    }
+
+    public function portal()
+    {
+        $setting = PortalSetting::query()->first();
+        $bioHistory = PortalBioHistory::query()
+            ->latest('id')
+            ->limit(4)
+            ->pluck('bio');
+
+        return view('admin.portal', [
+            'setting' => $setting,
+            'defaultBio' => PortalSetting::defaultBio(),
+            'bioHistory' => $bioHistory,
+        ]);
+    }
+
+    public function updatePortal(Request $request, UpdatePortalBio $updatePortalBio)
+    {
+        $validated = $request->validate([
+            'home_bio' => ['required', 'string', 'max:255'],
+        ]);
+
+        $updatePortalBio->handle($validated['home_bio']);
+
+        return back()->with('success', __('admin_ui.portal.updated'));
     }
 
     public function updateProfile(Request $request, UpdateUserProfile $updateUserProfile, ImageUploadHandler $uploader)

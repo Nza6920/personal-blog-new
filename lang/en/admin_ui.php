@@ -15,6 +15,7 @@ return [
         'heading' => 'Management',
         'create_topic' => 'New Article',
         'view_logs' => 'View Logs',
+        'portal_edit' => 'Edit Portal',
         'hint' => 'Use this area for drafts, shortcuts, or quick stats.',
     ],
 
@@ -104,6 +105,24 @@ return [
                 'trigger' => 'Enable two-factor auth',
                 'confirm' => 'Confirm enable',
             ],
+        ],
+    ],
+
+    'portal' => [
+        'page_title' => 'Portal Settings',
+        'heading' => 'Portal Content',
+        'subheading' => 'Update the bio text shown on the homepage.',
+        'back_list' => 'Back to list',
+        'bio_label' => 'Homepage bio',
+        'bio_placeholder' => 'Enter the homepage bio text',
+        'copy_hint' => 'Click to copy',
+        'bio_hint' => 'Keep it short so it fits on the homepage.',
+        'save' => 'Save',
+        'updated' => 'Portal settings updated.',
+        'modal' => [
+            'title' => 'Save portal settings?',
+            'message' => 'The homepage will be updated immediately.',
+            'confirm' => 'Confirm save',
         ],
     ],
 

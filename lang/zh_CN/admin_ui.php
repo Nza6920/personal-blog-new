@@ -15,6 +15,7 @@ return [
         'heading' => '管理工具',
         'create_topic' => '新建文章',
         'view_logs' => '日志查看',
+        'portal_edit' => '门户编辑',
         'hint' => '这里可以放草稿、快捷入口或统计信息。',
     ],
 
@@ -104,6 +105,24 @@ return [
                 'trigger' => '启用双因素认证',
                 'confirm' => '确认启用',
             ],
+        ],
+    ],
+
+    'portal' => [
+        'page_title' => '门户编辑',
+        'heading' => '门户内容',
+        'subheading' => '更新首页展示的 Bio 文案。',
+        'back_list' => '返回列表',
+        'bio_label' => '首页 Bio',
+        'bio_placeholder' => '请输入首页 Bio 文案',
+        'copy_hint' => '点击复制',
+        'bio_hint' => '建议保持简短，以便在首页完整展示。',
+        'save' => '保存',
+        'updated' => '门户信息已更新',
+        'modal' => [
+            'title' => '确认保存门户设置？',
+            'message' => '保存后首页将立即更新。',
+            'confirm' => '确认保存',
         ],
     ],
 

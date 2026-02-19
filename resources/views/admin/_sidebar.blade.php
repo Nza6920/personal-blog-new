@@ -11,6 +11,10 @@
         {{ __('admin_ui.sidebar.view_logs') }}
     </flux:button>
 
+    <flux:button href="{{ route('admin.portal.edit') }}" variant="primary" color="slate" class="w-full">
+        {{ __('admin_ui.sidebar.portal_edit') }}
+    </flux:button>
+
     <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-950/40 dark:text-slate-400">
         {{ __('admin_ui.sidebar.hint') }}
     </div>

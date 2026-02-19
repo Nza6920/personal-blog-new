@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', 'profile')->name('admin.profile');
         Route::post('/profile', 'updateProfile')->name('admin.profile.update');
         Route::post('/profile/password', 'updatePassword')->name('admin.profile.password');
+        Route::get('/portal', 'portal')->name('admin.portal.edit');
+        Route::post('/portal', 'updatePortal')->name('admin.portal.update');
         Route::get('/topics/{topic}', 'edit')->name('admin.topics.edit');
         Route::put('/topics/{topic}', 'update')->name('admin.topics.update');
         Route::patch('/topics/{topic}/publish', 'updatePublishStatus')->name('admin.topics.publish');
