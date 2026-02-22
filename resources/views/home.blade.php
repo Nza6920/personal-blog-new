@@ -167,6 +167,30 @@
         .home-pagination {
             text-align: center;
         }
+
+        @media screen and (min-width: 769px) {
+            .fh5co-post .fh5co-entry.padding {
+                display: flex;
+                align-items: center;
+            }
+
+            .fh5co-post .fh5co-entry.padding > img {
+                order: 2;
+                float: none;
+                margin-bottom: 0;
+                margin-left: auto;
+                margin-right: 8px;
+            }
+
+            .fh5co-post .fh5co-entry.padding > div {
+                order: 1;
+                float: none;
+                width: auto;
+                flex: 0 1 calc(100% - 110px);
+                margin-right: 30px;
+                min-width: 0;
+            }
+        }
     </style>
 @endsection
 
