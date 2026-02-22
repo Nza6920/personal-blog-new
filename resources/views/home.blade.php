@@ -22,6 +22,10 @@
             position: relative;
         }
 
+        #fh5co-aside {
+            background-image: url('uploads/images/system/image_1.jpg');
+        }
+
         #fh5co-aside nav ul li {
             display: inline-flex;
             align-items: center;
@@ -246,7 +250,7 @@
 
 @section('content')
     <div class="fh5co-loader"></div>
-    <div id="fh5co-aside" style="background-image: url('uploads/images/system/image_1.jpg')">
+    <div id="fh5co-aside">
 
         <div class="overlay"></div>
         <nav role="navigation">
