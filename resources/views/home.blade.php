@@ -147,6 +147,13 @@
         .home-search-panel ::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
+
+        #fh5co-aside .sentence {
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            white-space: nowrap;
+        }
     </style>
 @endsection
 
