@@ -154,6 +154,11 @@
             text-align: center;
             white-space: nowrap;
         }
+
+        .home_footer {
+            text-align: center;
+            bottom: 0;
+        }
     </style>
 @endsection
 
@@ -278,9 +283,9 @@
                 <div style="position: relative; left: 42%; top: 96%">
                     {!! $topics->render() !!}
                 </div>
-                <footer class="home_footer" style="text-align:center; bottom: 0;">
+                <footer class="home_footer">
                     <div>
-                        &copy;Niu Blog 2026 .Powered By Niu
+                        &copy; {{ date('Y') }} nza · Running since 2021 · Engineering Notes & Life Notes
                         <br><a href="https://beian.miit.gov.cn/" target="_blank">青ICP备18000982号</a>
                     </div>
                 </footer>
