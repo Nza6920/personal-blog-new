@@ -159,6 +159,10 @@
             text-align: center;
             bottom: 0;
         }
+
+        .home-pagination {
+            text-align: center;
+        }
     </style>
 @endsection
 
@@ -280,7 +284,7 @@
                         </div>
                     </div>
                 @endforeach
-                <div style="position: relative; left: 42%; top: 96%">
+                <div class="home-pagination">
                     {!! $topics->render() !!}
                 </div>
                 <footer class="home_footer">
