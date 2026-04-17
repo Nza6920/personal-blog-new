@@ -1,8 +1,4 @@
 @php
-    use League\CommonMark\Environment\Environment;
-    use League\CommonMark\MarkdownConverter;
-
-    $markdownConverter = new MarkdownConverter(Environment::createCommonMarkEnvironment());
     $topicTitle = $topic->title . ' | Niu 的个人博客';
     $topicDescription = make_excerpt(clean($topic->body), 140);
     $topicUrl = route('topics.show', $topic);
@@ -121,6 +117,29 @@
 
         .theme-dark .topic-body li {
             color: #ccc;
+        }
+
+        .theme-dark .topic-body table {
+            background: #262b35;
+            border-color: #475569;
+        }
+
+        .theme-dark .topic-body table th,
+        .theme-dark .topic-body table td {
+            color: #f8fafc;
+            border-color: #475569;
+        }
+
+        .theme-dark .topic-body table th {
+            background: #313744;
+        }
+
+        .theme-dark .topic-body table tr {
+            background: #262b35;
+        }
+
+        .theme-dark .topic-body table tr:nth-child(2n) {
+            background: #2c313d;
         }
 
         .topic-body p code,
@@ -249,7 +268,7 @@
                         <div class="fh5co-entry padding">
                             <div class="topic-body">
                                 @if ($topic->body_type === 'MARKDOWN')
-                                    {!! $markdownConverter->convert($topic->body)->getContent() !!}
+                                    {!! render_markdown($topic->body) !!}
                                 @else
                                     {!! $topic->body !!}
                                 @endif

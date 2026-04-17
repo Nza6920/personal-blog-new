@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 function route_class()
 {
@@ -25,4 +26,18 @@ function clean($value, $config = null)
         .'<h1><h2><h3><h4><h5><h6>';
 
     return strip_tags($value, $allowed);
+}
+
+function render_markdown(?string $value): string
+{
+    static $converter;
+
+    if ($converter === null) {
+        $converter = new GithubFlavoredMarkdownConverter([
+            'html_input' => 'allow',
+            'allow_unsafe_links' => false,
+        ]);
+    }
+
+    return $converter->convert((string) $value)->getContent();
 }
