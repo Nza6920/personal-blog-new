@@ -174,6 +174,11 @@ php artisan view:clear
 php artisan optimize
 php artisan queue:restart     # 可选（修改了 Job 相关逻辑时执行）
 
+# 重新校正上传目录权限，避免上传文件无法读取或写入
+sudo chown -R www-data:www-data /var/www/personal-blog/public/uploads
+sudo find /var/www/personal-blog/public/uploads -type d -exec chmod 755 {} \;
+sudo find /var/www/personal-blog/public/uploads -type f -exec chmod 644 {} \;
+
 sudo systemctl start nginx
 sudo systemctl status nginx
 ```
