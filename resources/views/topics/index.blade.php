@@ -192,6 +192,152 @@
             height: auto;
         }
 
+        .topic-content-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        #page.topic-index-wrapper {
+            overflow: visible;
+        }
+
+        #page.topic-index-wrapper #fh5co-main-content {
+            max-width: 1352px;
+        }
+
+        .topic-toc {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 18px;
+            z-index: 20;
+            align-self: flex-start;
+            padding: 20px 24px;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #dbe4ee;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .topic-toc h3 {
+            margin: 0 0 14px;
+            font-size: 16px;
+            color: #0f172a;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .topic-toc ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .topic-toc li + li {
+            margin-top: 10px;
+        }
+
+        .topic-toc li.topic-toc-item-level-2 a {
+            padding-left: 28px;
+            font-size: 14px;
+        }
+
+        .topic-toc li.topic-toc-item-level-2 a::before {
+            left: 12px;
+            width: 5px;
+            height: 5px;
+        }
+
+        .topic-toc a {
+            position: relative;
+            display: block;
+            padding-left: 16px;
+            color: #475569;
+            text-decoration: none;
+            transition: color 180ms ease;
+        }
+
+        .topic-toc a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #cbd5e1;
+            transform: translateY(-50%);
+            transition: transform 180ms ease, background-color 180ms ease;
+        }
+
+        .topic-toc a:hover,
+        .topic-toc a.is-active {
+            color: #0f172a;
+        }
+
+        .topic-toc a.is-active::before {
+            background: #ea4c89;
+            transform: translateY(-50%) scale(1.15);
+        }
+
+        .topic-body h1[id],
+        .topic-body h2[id] {
+            scroll-margin-top: 32px;
+        }
+
+        .theme-dark .topic-toc {
+            background: #20242d;
+            border-color: #3b4250;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.24);
+        }
+
+        .theme-dark .topic-toc h3,
+        .theme-dark .topic-toc a.is-active,
+        .theme-dark .topic-toc a:hover {
+            color: #f8fafc;
+        }
+
+        .theme-dark .topic-toc a {
+            color: #cbd5e1;
+        }
+
+        .theme-dark .topic-toc li.topic-toc-item-level-1 a,
+        .theme-dark .topic-toc li.topic-toc-item-level-1 a.is-active,
+        .theme-dark .topic-toc li.topic-toc-item-level-1 a:hover {
+            color: #f8fafc;
+        }
+
+        .theme-dark .topic-toc li.topic-toc-item-level-2 a {
+            color: #e2e8f0;
+        }
+
+        .theme-dark .topic-toc a::before {
+            background: #64748b;
+        }
+
+        .theme-dark .topic-toc a.is-active::before {
+            background: #ea4c89;
+        }
+
+        @media (min-width: 992px) {
+            .topic-content-shell {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 92px;
+            }
+
+            .topic-body {
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+
+            .topic-toc {
+                top: 28px;
+                width: 360px;
+                flex: 0 0 360px;
+            }
+        }
+
         .image-preview-overlay {
             position: fixed;
             top: 0;
@@ -266,12 +412,24 @@
                 <div id="fh5co-main-content">
                     <div class="fh5co-post">
                         <div class="fh5co-entry padding">
-                            <div class="topic-body">
-                                @if ($topic->body_type === 'MARKDOWN')
-                                    {!! render_markdown($topic->body) !!}
-                                @else
-                                    {!! $topic->body !!}
+                            <div class="topic-content-shell">
+                                @if (count($topicToc))
+                                    <aside class="topic-toc" data-topic-toc aria-label="{{ __('topic.navigation_label') }}">
+                                        <h3>{{ __('topic.table_of_contents') }}</h3>
+                                        <ul>
+                                            @foreach ($topicToc as $item)
+                                                <li class="topic-toc-item-level-{{ $item['level'] }}">
+                                                    <a href="#{{ $item['id'] }}" data-topic-toc-link="{{ $item['id'] }}">
+                                                        {{ $item['title'] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </aside>
                                 @endif
+                                <div class="topic-body">
+                                    {!! $topicBodyHtml !!}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -385,6 +543,154 @@
                                                                 localStorage.setItem(storageKey, next);
                                                                 applyTheme(next);
                                                             });
+
+                                                            const $toc = $('[data-topic-toc]');
+                                                            const $tocLinks = $toc.find('[data-topic-toc-link]');
+                                                            const headings = $tocLinks.map(function () {
+                                                                const id = $(this).data('topicTocLink');
+                                                                return document.getElementById(id);
+                                                            }).get().filter(Boolean);
+                                                            let activeSectionId = null;
+                                                            let pendingSectionId = null;
+
+                                                            function setActiveSection(id) {
+                                                                if (!id) {
+                                                                    return;
+                                                                }
+
+                                                                activeSectionId = id;
+
+                                                                $tocLinks.each(function () {
+                                                                    const $link = $(this);
+                                                                    const isActive = $link.data('topicTocLink') === id;
+                                                                    $link.toggleClass('is-active', isActive);
+
+                                                                    if (isActive) {
+                                                                        $link.attr('aria-current', 'true');
+                                                                    } else {
+                                                                        $link.removeAttr('aria-current');
+                                                                    }
+                                                                });
+                                                            }
+
+                                                            function setHash(sectionId) {
+                                                                if (!sectionId) {
+                                                                    return;
+                                                                }
+
+                                                                const nextHash = '#' + sectionId;
+
+                                                                if (window.location.hash === nextHash) {
+                                                                    return;
+                                                                }
+
+                                                                window.history.replaceState(null, '', nextHash);
+                                                            }
+
+                                                            if ($tocLinks.length) {
+                                                                const getObserverCandidateId = function () {
+                                                                    if (!headings.length) {
+                                                                        return null;
+                                                                    }
+
+                                                                    const viewportOffset = 56;
+                                                                    const headingsAboveOffset = headings.filter(function (heading) {
+                                                                        return heading.getBoundingClientRect().top <= viewportOffset;
+                                                                    });
+
+                                                                    if (headingsAboveOffset.length) {
+                                                                        return headingsAboveOffset[headingsAboveOffset.length - 1].id;
+                                                                    }
+
+                                                                    return headings[0].id;
+                                                                };
+
+                                                                const syncFromHash = function () {
+                                                                    const hash = window.location.hash.replace(/^#/, '');
+
+                                                                    if (hash && document.getElementById(hash)) {
+                                                                        setActiveSection(hash);
+                                                                        return;
+                                                                    }
+
+                                                                    syncActiveSection();
+                                                                };
+
+                                                                $tocLinks.on('click', function (event) {
+                                                                    event.preventDefault();
+
+                                                                    const sectionId = $(this).data('topicTocLink');
+                                                                    const target = document.getElementById(sectionId);
+
+                                                                    if (!target) {
+                                                                        return;
+                                                                    }
+
+                                                                    pendingSectionId = sectionId;
+                                                                    setActiveSection(sectionId);
+                                                                    target.scrollIntoView({
+                                                                        behavior: 'smooth',
+                                                                        block: 'start',
+                                                                    });
+                                                                    setHash(sectionId);
+                                                                });
+
+                                                                if ('IntersectionObserver' in window) {
+                                                                    const observer = new IntersectionObserver(function () {
+                                                                        const candidateId = getObserverCandidateId();
+
+                                                                        if (!candidateId) {
+                                                                            return;
+                                                                        }
+
+                                                                        if (pendingSectionId) {
+                                                                            if (candidateId !== pendingSectionId) {
+                                                                                setActiveSection(pendingSectionId);
+                                                                                return;
+                                                                            }
+
+                                                                            pendingSectionId = null;
+                                                                        }
+
+                                                                        if (candidateId !== activeSectionId) {
+                                                                            setActiveSection(candidateId);
+                                                                        }
+
+                                                                        setHash(candidateId);
+                                                                    }, {
+                                                                        root: null,
+                                                                        rootMargin: '-56px 0px -60% 0px',
+                                                                        threshold: [0, 1],
+                                                                    });
+
+                                                                    headings.forEach(function (heading) {
+                                                                        observer.observe(heading);
+                                                                    });
+                                                                } else {
+                                                                    $(window).on('scroll resize', function () {
+                                                                        const candidateId = getObserverCandidateId();
+
+                                                                        if (!candidateId) {
+                                                                            return;
+                                                                        }
+
+                                                                        if (pendingSectionId) {
+                                                                            if (candidateId !== pendingSectionId) {
+                                                                                setActiveSection(pendingSectionId);
+                                                                                return;
+                                                                            }
+
+                                                                            pendingSectionId = null;
+                                                                        }
+
+                                                                        setActiveSection(candidateId);
+                                                                        setHash(candidateId);
+                                                                    });
+                                                                }
+
+                                                                $(window).on('hashchange', syncFromHash);
+                                                                syncFromHash();
+                                                            }
 
                                                             const $overlay = $('.image-preview-overlay');
                                                             const $preview = $overlay.find('img');
