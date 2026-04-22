@@ -521,7 +521,6 @@
 
                     <div class="home-profile-copy">
                         <h1 class="home-profile-title">{{ __('home.profile.title') }}</h1>
-                        <p class="home-profile-description">{{ __('home.profile.description') }}</p>
                     </div>
                 </div>
 
@@ -541,6 +540,11 @@
                 <div class="home-profile-divider" aria-hidden="true"></div>
 
                 <div class="home-profile-sections">
+                    <section class="home-profile-section">
+                        <h2 class="home-profile-section-title">{{ __('home.about.title') }}</h2>
+                        <p class="home-profile-section-body">{{ __('home.profile.description') }}</p>
+                    </section>
+
                     <section class="home-profile-section">
                         <h2 class="home-profile-section-title">{{ __('home.tech_stack.title') }}</h2>
                         <div class="home-profile-tags" data-home-tech-stack>
