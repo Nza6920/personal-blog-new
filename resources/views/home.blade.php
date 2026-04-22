@@ -1,67 +1,123 @@
 @extends('layouts.app')
-@section('title', 'Niu的个人博客 - 首页')
+
+@php
+    $metaTitle = __('home.meta.title');
+    $metaDescription = __('home.meta.description');
+    $profileLinks = [
+        [
+            'label' => __('home.actions.github'),
+            'href' => 'https://github.com/Nza6920',
+            'icon' => 'icon-github',
+        ],
+        [
+            'label' => __('home.actions.search'),
+            'href' => '#',
+            'icon' => 'icon-search',
+            'class' => 'js-search-toggle',
+        ],
+        [
+            'label' => __('home.actions.rss'),
+            'href' => route('feeds.main'),
+            'icon' => 'icon-rss',
+        ],
+    ];
+    $techStack = __('home.tech_stack.items');
+@endphp
+
+@section('title', $metaTitle)
 
 @section('meta')
-    <meta name="description" content="Niu 的个人博客首页，分享技术文章与思考。">
+    <meta name="description" content="{{ $metaDescription }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Niu的个人博客 - 首页">
-    <meta property="og:description" content="Niu 的个人博客首页，分享技术文章与思考。">
+    <meta property="og:title" content="{{ $metaTitle }}">
+    <meta property="og:description" content="{{ $metaDescription }}">
     <meta property="og:url" content="{{ route('home.show') }}">
     <meta property="og:image" content="{{ asset('uploads/images/system/niu.png') }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Niu的个人博客 - 首页">
-    <meta name="twitter:description" content="Niu 的个人博客首页，分享技术文章与思考。">
+    <meta name="twitter:title" content="{{ $metaTitle }}">
+    <meta name="twitter:description" content="{{ $metaDescription }}">
     <meta name="twitter:image" content="{{ asset('uploads/images/system/niu.png') }}">
     <link rel="canonical" href="{{ route('home.show') }}">
-    <link rel="alternate" type="application/rss+xml" title="Niu Blog RSS" href="{{ route('feeds.main') }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ __('home.actions.rss') }}" href="{{ route('feeds.main') }}">
 @endsection
 
 @section('styles')
     <style>
-        #fh5co-aside nav {
-            position: relative;
-        }
-
         #fh5co-aside {
-            background-image: url('uploads/images/system/image_1.jpg');
+            width: 34%;
+            background-image:
+                linear-gradient(180deg, rgba(10, 14, 20, 0.12), rgba(10, 14, 20, 0.82)),
+                url('{{ asset('uploads/images/system/image_1.jpg') }}');
+            background-position: center center;
         }
 
-        #fh5co-aside nav ul li {
+        #fh5co-main-content {
+            margin-left: 34%;
+        }
+
+        #fh5co-aside .overlay {
+            background:
+                radial-gradient(circle at top, rgba(88, 132, 255, 0.16), transparent 38%),
+                linear-gradient(180deg, rgba(6, 11, 17, 0.08), rgba(6, 11, 17, 0.74));
+            opacity: 1;
+        }
+
+        #fh5co-aside nav.home-profile-nav {
+            position: relative;
+            top: auto;
+            bottom: auto !important;
+            padding: 0;
+        }
+
+        #fh5co-aside nav.home-profile-nav ul {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #fh5co-aside nav.home-profile-nav ul li {
             display: inline-flex;
             align-items: center;
-            margin-right: 6px;
+            margin: 0;
         }
 
-        #fh5co-aside nav ul li:last-child {
-            margin-right: 0;
+        #fh5co-aside nav.home-profile-nav ul li a,
+        .home-theme-toggle {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.88);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        #fh5co-aside nav.home-profile-nav ul li a {
+            font-size: 16px;
+            line-height: 1;
+            text-transform: none;
         }
 
         .home-theme-toggle {
-            position: relative;
-            top: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 0;
-            color: rgba(255, 255, 255, 0.5);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
             cursor: pointer;
-            display: block;
-            text-align: center;
             padding: 0;
-            font-size: 14px;
-            line-height: 30px;
-            vertical-align: middle;
+            font-size: 16px;
         }
 
         .home-theme-toggle i {
             display: block;
-            line-height: 30px;
+            line-height: 1;
         }
 
+        #fh5co-aside nav.home-profile-nav ul li a:hover,
         .home-theme-toggle:hover {
-            background: white;
-            color: #000;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.24);
+            color: #fff;
+            transform: translateY(-1px);
         }
 
         .home-theme-toggle .icon-light-up {
@@ -77,16 +133,16 @@
         }
 
         .theme-dark {
-            background: #262b35;
-            color: #e6e6e6;
+            background: #20252f;
+            color: #e6edf5;
         }
 
         .theme-dark #page {
-            background: #262b35;
+            background: #20252f;
         }
 
         .theme-dark a {
-            color: #c9d8ff;
+            color: #c8d9ff;
         }
 
         .theme-dark .fh5co-post .fh5co-entry > div a {
@@ -94,7 +150,7 @@
         }
 
         .theme-dark .fh5co-post .fh5co-entry > div a:hover {
-            color: #c9d8ff;
+            color: #c8d9ff;
         }
 
         .theme-dark .fh5co-entry {
@@ -102,8 +158,129 @@
             border-color: rgba(255, 255, 255, 0.08);
         }
 
+        .theme-dark .home-profile-chip,
+        .theme-dark .home-profile-action {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
         .fh5co-post .fh5co-entry > div h2 {
             font-weight: 200;
+        }
+
+        .home-profile-shell {
+            position: relative;
+            z-index: 12;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 28px clamp(20px, 3.8vw, 40px) 34px;
+        }
+
+        .home-profile-content {
+            margin-top: 28px;
+            max-width: 540px;
+        }
+
+        .home-profile-hero {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .home-profile-avatar {
+            width: 116px;
+            height: 116px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.26);
+        }
+
+        .home-profile-title {
+            margin: 0;
+            font-size: clamp(34px, 5vw, 44px);
+            line-height: 1.08;
+            font-weight: 300;
+            color: #fff;
+        }
+
+        .home-profile-description,
+        .home-profile-section-body {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 15px;
+            line-height: 1.85;
+        }
+
+        .home-profile-description {
+            margin-top: 2px;
+        }
+
+        .home-profile-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .home-profile-action {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .home-profile-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.24);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .home-profile-divider {
+            margin: 24px 0 18px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.04));
+        }
+
+        .home-profile-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .home-profile-section-title {
+            margin: 0 0 8px;
+            font-size: 18px;
+            line-height: 1.2;
+            font-weight: 600;
+            color: #dfffd4;
+        }
+
+        .home-profile-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .home-profile-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 0 13px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.11);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 14px;
+            line-height: 1;
         }
 
         .home-search-panel {
@@ -113,7 +290,7 @@
             transform: translate(-50%, -50%);
             z-index: 1000;
             background: rgba(0, 0, 0, 0.75);
-            border-radius: 6px;
+            border-radius: 12px;
             padding: 16px 20px;
             display: none;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -152,13 +329,6 @@
             color: rgba(255, 255, 255, 0.6);
         }
 
-        #fh5co-aside .sentence {
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            white-space: nowrap;
-        }
-
         .home_footer {
             text-align: center;
             bottom: 0;
@@ -189,6 +359,53 @@
                 flex: 0 1 calc(100% - 110px);
                 margin-right: 30px;
                 min-width: 0;
+            }
+        }
+
+        @media screen and (max-width: 1024px) {
+            .home-profile-content {
+                max-width: 100%;
+            }
+
+            .home-search-panel {
+                left: 50%;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .home-profile-shell {
+                min-height: 700px;
+                padding: 22px 18px 28px;
+            }
+
+            .home-profile-content {
+                margin-top: 22px;
+            }
+
+            .home-profile-title {
+                font-size: 34px;
+            }
+
+            .home-profile-summary,
+            .home-profile-description,
+            .home-profile-section-body {
+                line-height: 1.72;
+            }
+
+            .home-search-panel {
+                top: 22%;
+                width: calc(100% - 32px);
+                padding: 14px 16px;
+            }
+
+            .home-search-panel form {
+                width: 100%;
+            }
+
+            .home-search-panel input[type="search"] {
+                width: 100%;
+                min-width: 0;
+                font-size: 16px;
             }
         }
     </style>
@@ -275,39 +492,76 @@
 @section('content')
     <div class="fh5co-loader"></div>
     <div id="fh5co-aside">
-
         <div class="overlay"></div>
-        <nav role="navigation">
-            <ul>
-                <li><a href="{{ route('home.show') }}"><i class="icon-home"></i></a></li>
-                <li>
-                    <button type="button" class="home-theme-toggle" aria-label="Toggle theme" aria-pressed="false">
-                        <i class="icon-light-down" aria-hidden="true"></i>
-                        <i class="icon-light-up" aria-hidden="true"></i>
-                    </button>
-                </li>
-            </ul>
-        </nav>
 
-        <div class="sentence">
-            <h1>{{ $homeBio }}</h1>
-        </div>
+        <div class="home-profile-shell" data-home-profile-panel>
+            <nav class="home-profile-nav" role="navigation" aria-label="{{ __('home.nav.label') }}">
+                <ul>
+                    <li>
+                        <a href="{{ route('home.show') }}" aria-label="{{ __('home.nav.home') }}">
+                            <i class="icon-home" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <button type="button" class="home-theme-toggle" aria-label="{{ __('home.nav.theme_toggle') }}" aria-pressed="false">
+                            <i class="icon-light-down" aria-hidden="true"></i>
+                            <i class="icon-light-up" aria-hidden="true"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
 
-        <div class="featured">
-            <span>welcome</span>
-            <span><a href="https://github.com/Nza6920">see what I build →</a></span>
+            <div class="home-profile-content">
+                <div class="home-profile-hero">
+                    <img
+                        class="home-profile-avatar"
+                        src="{{ asset('uploads/images/system/avatar.jpg') }}"
+                        alt="{{ __('home.profile.avatar_alt') }}"
+                    >
+
+                    <div class="home-profile-copy">
+                        <h1 class="home-profile-title">{{ __('home.profile.title') }}</h1>
+                        <p class="home-profile-description">{{ __('home.profile.description') }}</p>
+                    </div>
+                </div>
+
+                <div class="home-profile-actions" data-home-profile-actions>
+                    @foreach ($profileLinks as $link)
+                        <a
+                            href="{{ $link['href'] }}"
+                            class="home-profile-action {{ $link['class'] ?? '' }}"
+                            aria-label="{{ $link['label'] }}"
+                            @if (! str_starts_with($link['href'], '#')) target="_blank" rel="noreferrer" @endif
+                        >
+                            <i class="{{ $link['icon'] }}" aria-hidden="true"></i>
+                        </a>
+                    @endforeach
+                </div>
+
+                <div class="home-profile-divider" aria-hidden="true"></div>
+
+                <div class="home-profile-sections">
+                    <section class="home-profile-section">
+                        <h2 class="home-profile-section-title">{{ __('home.tech_stack.title') }}</h2>
+                        <div class="home-profile-tags" data-home-tech-stack>
+                            @foreach ($techStack as $tech)
+                                <span class="home-profile-chip">{{ $tech }}</span>
+                            @endforeach
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
     </div>
     <div id="page">
         <div id="fh5co-main-content">
             <div class="fh5co-post">
-
                 @foreach ($topics as $topic)
                     <div class="fh5co-entry padding">
                         <img src="{{ $topic->user->avatar }}" alt="Free HTML5 Bootstrap Template by FreeHTML5.co">
                         <div>
                             <span class="fh5co-post-date">{{ $topic->created_at->diffForHumans() }}</span>
-                            <h2><a href="{{ route('topics.show',$topic) }}">{{ $topic->title }}</a></h2>
+                            <h2><a href="{{ route('topics.show', $topic) }}">{{ $topic->title }}</a></h2>
                             <p>{{ $topic->excerpt }}</p>
                         </div>
                     </div>
@@ -327,16 +581,16 @@
 
     <div class="home-search-panel" aria-hidden="true">
         <form method="GET" action="{{ route('home.show') }}" role="search">
-            <input type="search" name="keyword" placeholder="搜索文章" autocomplete="off" value="{{ $search ?? '' }}">
-            <button type="submit" aria-label="Search">
+            <input type="search" name="keyword" placeholder="{{ __('home.search.placeholder') }}" autocomplete="off" value="{{ $search ?? '' }}">
+            <button type="submit" aria-label="{{ __('home.search.submit_label') }}">
                 <i class="icon-search" aria-hidden="true"></i>
             </button>
         </form>
     </div>
     <div class="gototop gototop--search js-top">
-        <a href="#" class="js-search-toggle" aria-label="Toggle search"><i class="icon-search"></i></a>
+        <a href="#" class="js-search-toggle" aria-label="{{ __('home.actions.search') }}"><i class="icon-search"></i></a>
     </div>
     <div class="gototop js-top">
-        <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
+        <a href="#" class="js-gotop" aria-label="{{ __('home.nav.back_to_top') }}"><i class="icon-arrow-up"></i></a>
     </div>
 @endsection
