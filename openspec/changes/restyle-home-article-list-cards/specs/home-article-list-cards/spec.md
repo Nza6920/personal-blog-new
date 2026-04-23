@@ -8,12 +8,13 @@ The system SHALL render each home page article entry as a horizontal card with a
 - **THEN** each article entry shows a fixed cover region on the left side
 - **AND** the article title and excerpt are rendered in a separate content region to the right of the cover
 
-### Requirement: Home page article cards use a placeholder cover when no article cover exists
-The system SHALL use an available placeholder image for the left cover area until a dedicated article cover source is introduced.
+### Requirement: Home page article cards reuse article background images as cover sources
+The system SHALL use the article background image as the left cover source when it exists, and fall back to a default cover image when it does not.
 
-#### Scenario: Reuse avatar image as initial cover placeholder
+#### Scenario: Prefer article background image for the list cover
 - **WHEN** the home page article list is rendered with the current data model
-- **THEN** each article card uses the existing author avatar image as the cover placeholder
+- **THEN** each article card uses the existing article background image as the cover source when available
+- **AND** the card falls back to a default cover image when no article background image exists
 - **AND** the previous right-side avatar presentation is not rendered
 
 ### Requirement: Home page article cards preserve current article navigation and summary content
@@ -32,3 +33,4 @@ The system SHALL keep the redesigned article cards legible across the existing d
 - **WHEN** the home page is viewed in dark theme or on a narrow viewport
 - **THEN** the article card keeps visible separation between cover and content areas
 - **AND** the cover image, text content, and spacing adapt without overlap or unreadable contrast
+- **AND** the dark theme page background and card background remain visually consistent across the article list and footer area

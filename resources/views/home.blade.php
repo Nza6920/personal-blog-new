@@ -155,6 +155,15 @@
             background: #0D1117;
         }
 
+        .theme-dark .home_footer {
+            background: #0D1117;
+            color: rgba(230, 237, 245, 0.74);
+        }
+
+        .theme-dark .home_footer a {
+            color: rgba(200, 217, 255, 0.9);
+        }
+
         .theme-dark .fh5co-post .home-article-entry:hover {
             box-shadow: 0 22px 44px rgba(0, 0, 0, 0.3);
             border-color: rgba(96, 165, 250, 0.24);
@@ -444,8 +453,15 @@
         }
 
         .home_footer {
+            background: #fff;
+            color: #667085;
             text-align: center;
             bottom: 0;
+            padding: 10px 20px !important;
+        }
+
+        .home_footer a {
+            color: inherit;
         }
 
         .home-pagination {
@@ -556,7 +572,7 @@
                 }
             }
 
-            applyTheme(localStorage.getItem(storageKey));
+            applyTheme(localStorage.getItem(storageKey) ?? 'dark');
 
             $toggle.on('click', function () {
                 const isDark = $body.hasClass('theme-dark');
