@@ -62,4 +62,38 @@ class ShowHomeTest extends TestCase
         $response->assertSee('class="home-theme-toggle"', false);
         $response->assertSee('class="js-search-toggle"', false);
     }
+
+    public function test_home_page_uses_topic_cover_image_for_article_card(): void
+    {
+        $coverPath = 'http://localhost/uploads/images/covers/home-cover.jpg';
+
+        Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'title' => 'Topic with custom cover',
+                'cover_img' => $coverPath,
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee('src="'.$coverPath.'"', false);
+    }
+
+    public function test_home_page_uses_default_cover_when_topic_cover_is_missing(): void
+    {
+        Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'title' => 'Topic without custom cover',
+                'cover_img' => null,
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee('uploads/images/system/default.jpg', false);
+    }
 }

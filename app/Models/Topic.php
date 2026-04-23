@@ -15,7 +15,7 @@ class Topic extends Model implements Feedable, Sitemapable
     use HasFactory;
     use Traits\HashIdHelper;
 
-    protected $fillable = ['title', 'body', 'body_type', 'is_published'];
+    protected $fillable = ['title', 'body', 'body_type', 'cover_img', 'is_published'];
 
     protected $casts = [
         'created_at' => 'datetime',

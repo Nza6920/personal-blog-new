@@ -87,6 +87,33 @@
                                     @endif
                                 </div>
 
+                                <div class="space-y-2" x-data="{ selectedCoverName: '{{ __('admin_ui.editor.cover_upload_no_file') }}' }">
+                                    <label for="cover_img"
+                                           class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ __('admin_ui.editor.cover_label') }}</label>
+                                    <input
+                                        id="cover_img"
+                                        type="file"
+                                        name="cover_img"
+                                        accept="image/*"
+                                        class="hidden"
+                                        x-ref="coverInput"
+                                        aria-label="{{ __('admin_ui.editor.cover_label') }}"
+                                        x-on:change="selectedCoverName = $event.target.files.length ? $event.target.files[0].name : '{{ __('admin_ui.editor.cover_upload_no_file') }}'"
+                                    >
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <flux:button type="button" size="sm" variant="filled" color="slate" x-on:click="$refs.coverInput.click()">
+                                            {{ __('admin_ui.editor.cover_upload_button') }}
+                                        </flux:button>
+                                        <span class="text-xs text-slate-500 dark:text-slate-400" x-text="selectedCoverName"></span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ __('admin_ui.editor.cover_upload_hint') }}</p>
+                                    @if($topic->cover_img)
+                                        <img
+                                            class="h-32 rounded-xl border border-slate-200 object-cover shadow-sm dark:border-slate-800"
+                                            src="{{ $topic->cover_img }}" alt="{{ __('admin_ui.editor.cover_preview_alt') }}">
+                                    @endif
+                                </div>
+
                                 <div class="flex items-center justify-end gap-3">
                                     <flux:button type="submit" variant="primary" color="slate">
                                         {{ __('admin_ui.editor.save') }}

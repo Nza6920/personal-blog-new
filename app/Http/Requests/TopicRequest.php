@@ -17,6 +17,7 @@ class TopicRequest extends Request
                     'title' => 'required|min:2',
                     'body' => 'required|min:3',
                     'body_type' => 'nullable|in:MARKDOWN,HTML',
+                    'cover_img' => 'nullable|image|max:500',
                 ];
 
             case 'GET':
@@ -24,7 +25,7 @@ class TopicRequest extends Request
             default:
 
                 return [];
-                ;
+
         }
     }
 

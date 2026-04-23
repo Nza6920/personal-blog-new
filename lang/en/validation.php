@@ -5,9 +5,20 @@ return [
     'string' => 'The :attribute field must be a string.',
     'confirmed' => 'The :attribute field confirmation does not match.',
     'current_password' => 'The current password is incorrect.',
+    'image' => 'The :attribute field must be an image.',
 
     'min' => [
         'string' => 'The :attribute field must be at least :min characters.',
+    ],
+
+    'max' => [
+        'file' => 'The :attribute field must not be greater than :max kilobytes.',
+    ],
+
+    'custom' => [
+        'cover_img' => [
+            'max' => 'The cover image must not be greater than 500 KB.',
+        ],
     ],
 
     'password' => [
@@ -26,5 +37,6 @@ return [
         'current_password' => 'current password',
         'title' => 'title',
         'body' => 'content',
+        'cover_img' => 'cover image',
     ],
 ];

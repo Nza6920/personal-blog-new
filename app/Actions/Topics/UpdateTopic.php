@@ -8,8 +8,13 @@ use Illuminate\Http\UploadedFile;
 
 class UpdateTopic
 {
-    public function handle(Topic $topic, array $data, ?UploadedFile $background, ImageUploadHandler $uploader): Topic
-    {
+    public function handle(
+        Topic $topic,
+        array $data,
+        ?UploadedFile $background,
+        ?UploadedFile $coverImg,
+        ImageUploadHandler $uploader
+    ): Topic {
         $topic->fill($data);
         $topic->body_type = $topic->body_type ?: 'HTML';
 
@@ -17,6 +22,13 @@ class UpdateTopic
             $result = $uploader->save($background, 'background', $topic->id);
             if ($result) {
                 $topic->background = $result['path'];
+            }
+        }
+
+        if ($coverImg && $coverImg->isValid()) {
+            $result = $uploader->save($coverImg, 'covers', $topic->id);
+            if ($result) {
+                $topic->cover_img = $result['path'];
             }
         }
 

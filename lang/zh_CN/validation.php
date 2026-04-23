@@ -5,9 +5,20 @@ return [
     'string' => ':attribute 必须是字符串。',
     'confirmed' => ':attribute 与确认值不匹配。',
     'current_password' => '当前密码不正确。',
+    'image' => ':attribute 必须是图片。',
 
     'min' => [
         'string' => ':attribute 至少需要 :min 个字符。',
+    ],
+
+    'max' => [
+        'file' => ':attribute 不能超过 :max KB。',
+    ],
+
+    'custom' => [
+        'cover_img' => [
+            'max' => '封面图片不能超过 500KB。',
+        ],
     ],
 
     'password' => [
@@ -26,5 +37,6 @@ return [
         'current_password' => '当前密码',
         'title' => '标题',
         'body' => '内容',
+        'cover_img' => '封面图片',
     ],
 ];

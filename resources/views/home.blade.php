@@ -706,7 +706,7 @@
             <div class="fh5co-post">
                 @foreach ($topics as $topic)
                     @php
-                        $topicCover = $topic->background ?: asset('uploads/images/system/default.jpg');
+                        $topicCover = $topic->cover_img ?: asset('uploads/images/system/default.jpg');
                     @endphp
                     <div class="fh5co-entry home-article-entry">
                         <div class="home-article-card-cover">

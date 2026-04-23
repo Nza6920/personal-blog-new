@@ -131,6 +131,7 @@ class AdminController extends Controller
             $request->user(),
             $request->only(['title', 'body', 'body_type']),
             $request->file('background'),
+            $request->file('cover_img'),
             $uploader
         );
 
@@ -173,6 +174,7 @@ class AdminController extends Controller
             $topic,
             $request->only(['title', 'body', 'body_type']),
             $request->file('background'),
+            $request->file('cover_img'),
             $uploader
         );
 
