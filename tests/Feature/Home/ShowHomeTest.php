@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Home;
 
-use App\Models\PortalSetting;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,10 +13,6 @@ class ShowHomeTest extends TestCase
 
     public function test_home_page_renders_redesigned_left_profile_panel(): void
     {
-        PortalSetting::query()->create([
-            'home_bio' => 'Building resilient systems with patience.',
-        ]);
-
         $topic = Topic::factory()
             ->for(User::factory())
             ->create([
@@ -31,7 +26,7 @@ class ShowHomeTest extends TestCase
         $response->assertOk();
         $response->assertSee('data-home-profile-panel', false);
         $response->assertSee(__('home.profile.title'));
-        $response->assertSee('Building resilient systems with patience.');
+        $response->assertSee(__('home.profile.description'));
         $response->assertSee(__('home.about.title'));
         $response->assertSee(__('home.tech_stack.title'));
         $response->assertSee('data-home-profile-actions', false);

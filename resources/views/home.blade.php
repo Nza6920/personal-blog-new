@@ -145,17 +145,36 @@
             color: #c8d9ff;
         }
 
-        .theme-dark .fh5co-post .fh5co-entry > div a {
+        .theme-dark .fh5co-post .home-article-entry {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+        }
+
+        .theme-dark .fh5co-post .home-article-entry:hover {
+            box-shadow: none;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .theme-dark .home-article-card-content h2 a,
+        .theme-dark .home-article-card-content a {
             color: #fff;
         }
 
-        .theme-dark .fh5co-post .fh5co-entry > div a:hover {
+        .theme-dark .home-article-card-content h2 a:hover,
+        .theme-dark .home-article-card-content a:hover {
             color: #c8d9ff;
         }
 
-        .theme-dark .fh5co-entry {
-            background: transparent;
-            border-color: rgba(255, 255, 255, 0.08);
+        .theme-dark .home-article-card-date,
+        .theme-dark .home-article-card-excerpt {
+            color: rgba(230, 237, 245, 0.74);
+        }
+
+        .theme-dark .home-article-card-cover {
+            background:
+                linear-gradient(180deg, rgba(2, 6, 23, 0.16), rgba(2, 6, 23, 0.48)),
+                linear-gradient(135deg, #07111f, #0d2740 58%, #0f4c5c);
         }
 
         .theme-dark .home-profile-chip,
@@ -166,6 +185,94 @@
 
         .fh5co-post .fh5co-entry > div h2 {
             font-weight: 200;
+        }
+
+        .fh5co-post {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .fh5co-post .home-article-entry {
+            display: grid;
+            grid-template-columns: minmax(204px, 252px) minmax(0, 1fr);
+            column-gap: 24px;
+            align-items: start;
+            padding: 16px 18px;
+            overflow: visible;
+            border-radius: 0;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            background: transparent;
+            box-shadow: none;
+            transition: border-color 0.22s ease;
+        }
+
+        .fh5co-post .home-article-entry:hover {
+            border-color: rgba(88, 132, 255, 0.16);
+        }
+
+        .fh5co-post .home-article-entry > div {
+            width: auto;
+            float: none;
+            margin-right: 0;
+        }
+
+        .home-article-card-cover {
+            position: relative;
+            align-self: center;
+            width: 100%;
+            max-width: 252px;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            background:
+                linear-gradient(180deg, rgba(5, 12, 24, 0.08), rgba(5, 12, 24, 0.28)),
+                linear-gradient(135deg, #0f1b31, #143b5f 58%, #1d6b7f);
+        }
+
+        .home-article-card-cover img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .home-article-card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-self: center;
+            min-width: 0;
+            width: 100%;
+            padding: 6px 18px 6px 0;
+        }
+
+        .home-article-card-date {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .home-article-card-content h2 {
+            margin: 0;
+            font-size: clamp(24px, 2.8vw, 31px);
+            line-height: 1.2;
+            font-weight: 300;
+        }
+
+        .home-article-card-content h2 a {
+            color: #111827;
+        }
+
+        .home-article-card-excerpt {
+            margin: 12px 0 0;
+            color: #667085;
+            font-size: 15px;
+            line-height: 1.8;
         }
 
         .home-profile-shell {
@@ -338,30 +445,6 @@
             text-align: center;
         }
 
-        @media screen and (min-width: 769px) {
-            .fh5co-post .fh5co-entry.padding {
-                display: flex;
-                align-items: center;
-            }
-
-            .fh5co-post .fh5co-entry.padding > img {
-                order: 2;
-                float: none;
-                margin-bottom: 0;
-                margin-left: auto;
-                margin-right: 8px;
-            }
-
-            .fh5co-post .fh5co-entry.padding > div {
-                order: 1;
-                float: none;
-                width: auto;
-                flex: 0 1 calc(100% - 110px);
-                margin-right: 30px;
-                min-width: 0;
-            }
-        }
-
         @media screen and (max-width: 1024px) {
             .home-profile-content {
                 max-width: 100%;
@@ -369,6 +452,20 @@
 
             .home-search-panel {
                 left: 50%;
+            }
+
+            .fh5co-post .home-article-entry {
+                grid-template-columns: minmax(184px, 216px) minmax(0, 1fr);
+                column-gap: 18px;
+                padding: 14px 16px;
+            }
+
+            .home-article-card-cover {
+                max-width: 216px;
+            }
+
+            .home-article-card-content {
+                padding: 4px 16px 4px 0;
             }
         }
 
@@ -406,6 +503,29 @@
                 width: 100%;
                 min-width: 0;
                 font-size: 16px;
+            }
+
+            .fh5co-post {
+                gap: 14px;
+            }
+
+            .fh5co-post .home-article-entry {
+                grid-template-columns: 1fr;
+                row-gap: 14px;
+                padding: 14px 12px 18px;
+            }
+
+            .home-article-card-cover {
+                width: 100%;
+                max-width: none;
+            }
+
+            .home-article-card-content {
+                padding: 0 0 0;
+            }
+
+            .home-article-card-content h2 {
+                font-size: 24px;
             }
         }
     </style>
@@ -561,12 +681,14 @@
         <div id="fh5co-main-content">
             <div class="fh5co-post">
                 @foreach ($topics as $topic)
-                    <div class="fh5co-entry padding">
-                        <img src="{{ $topic->user->avatar }}" alt="Free HTML5 Bootstrap Template by FreeHTML5.co">
-                        <div>
-                            <span class="fh5co-post-date">{{ $topic->created_at->diffForHumans() }}</span>
+                    <div class="fh5co-entry home-article-entry">
+                        <div class="home-article-card-cover">
+                            <img src="{{ $topic->user->avatar }}" alt="{{ $topic->title }}">
+                        </div>
+                        <div class="home-article-card-content">
+                            <span class="fh5co-post-date home-article-card-date">{{ $topic->created_at->diffForHumans() }}</span>
                             <h2><a href="{{ route('topics.show', $topic) }}">{{ $topic->title }}</a></h2>
-                            <p>{{ $topic->excerpt }}</p>
+                            <p class="home-article-card-excerpt">{{ $topic->excerpt }}</p>
                         </div>
                     </div>
                 @endforeach

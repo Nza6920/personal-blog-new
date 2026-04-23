@@ -40,7 +40,7 @@ Agent-focused conventions for this repository. Keep changes small, consistent, a
 ### Primary commands
 - Run tests (preferred): `composer run test`.
 - Run tests directly: `php artisan test`.
-- Format PHP: `php artisan pint`.
+- Format PHP: `composer run format` or `vendor/bin/pint`.
 
 ### Run a single test (important)
 - Single file: `php artisan test tests/Feature/ExampleTest.php`.
@@ -68,7 +68,7 @@ Agent-focused conventions for this repository. Keep changes small, consistent, a
   - LF line endings.
   - final newline required.
   - trim trailing whitespace (except Markdown).
-- Run `php artisan pint` after PHP edits.
+- Run `composer run format` after PHP edits.
 
 ### PHP style
 - Follow Laravel conventions and PSR-4 paths.
@@ -129,7 +129,7 @@ Agent-focused conventions for this repository. Keep changes small, consistent, a
 
 ## Agent Workflow Expectations
 - Before coding, inspect nearby patterns in `app/`, `routes/`, and `tests/`.
-- After coding, run relevant tests and `php artisan pint`.
+- After coding, run relevant tests and `composer run format`.
 - Report exactly what was run and what passed/failed.
 
 ## Cursor / Copilot Rules
@@ -140,6 +140,6 @@ Agent-focused conventions for this repository. Keep changes small, consistent, a
 
 ## Practical Defaults for Agents
 - Default test command after backend edits: `composer run test`.
-- Default quick check after PHP edits: `php artisan pint`.
+- Default quick check after PHP edits: `composer run format`.
 - For one failing test, iterate with `php artisan test --filter ...` until green.
 - If conventions conflict, follow existing local file patterns first, then this guide.
