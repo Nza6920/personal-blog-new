@@ -13,7 +13,6 @@ return [
     ],
     'profile' => [
         'avatar_alt' => 'Niu 头像',
-        'kicker' => 'Niu 的技术手记',
         'title' => 'Still finding my way.',
         'description' => '专注于分布式系统、领域驱动设计与工程实践、相信代码改变世界',
     ],
@@ -24,7 +23,6 @@ return [
     ],
     'about' => [
         'title' => '关于我',
-        'body' => '专注于分布式系统、领域驱动设计与工程实践。相信代码改变世界，也相信文字沉淀思考。',
     ],
     'tech_stack' => [
         'title' => '技术栈',

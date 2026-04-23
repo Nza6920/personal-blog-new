@@ -44,7 +44,7 @@
 @section('styles')
     <style>
         #fh5co-aside {
-            width: 34%;
+            width: 30%;
             background-image:
                 linear-gradient(180deg, rgba(10, 14, 20, 0.12), rgba(10, 14, 20, 0.82)),
                 url('{{ asset('uploads/images/system/image_1.jpg') }}');
@@ -52,7 +52,7 @@
         }
 
         #fh5co-main-content {
-            margin-left: 34%;
+            margin-left: 30%;
         }
 
         #fh5co-aside .overlay {
@@ -133,12 +133,12 @@
         }
 
         .theme-dark {
-            background: #20252f;
+            background: #0D1117;
             color: #e6edf5;
         }
 
         .theme-dark #page {
-            background: #20252f;
+            background: #0D1117;
         }
 
         .theme-dark a {
@@ -146,14 +146,18 @@
         }
 
         .theme-dark .fh5co-post .home-article-entry {
-            background: transparent;
-            border-color: rgba(255, 255, 255, 0.08);
-            box-shadow: none;
+            background: #12171D;
+            border-color: rgba(148, 163, 184, 0.14);
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
+        }
+
+        .theme-dark .fh5co-post {
+            background: #0D1117;
         }
 
         .theme-dark .fh5co-post .home-article-entry:hover {
-            box-shadow: none;
-            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, 0.3);
+            border-color: rgba(96, 165, 250, 0.24);
         }
 
         .theme-dark .home-article-card-content h2 a,
@@ -191,6 +195,7 @@
             display: flex;
             flex-direction: column;
             gap: 18px;
+            padding: 8px 12px 0;
         }
 
         .fh5co-post .home-article-entry {
@@ -200,15 +205,17 @@
             align-items: start;
             padding: 16px 18px;
             overflow: visible;
-            border-radius: 0;
+            border-radius: 18px;
             border: 1px solid rgba(15, 23, 42, 0.08);
-            background: transparent;
-            box-shadow: none;
-            transition: border-color 0.22s ease;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
         }
 
         .fh5co-post .home-article-entry:hover {
+            transform: translateY(-2px);
             border-color: rgba(88, 132, 255, 0.16);
+            box-shadow: 0 22px 42px rgba(15, 23, 42, 0.12);
         }
 
         .fh5co-post .home-article-entry > div {
@@ -306,7 +313,7 @@
 
         .home-profile-title {
             margin: 0;
-            font-size: clamp(34px, 5vw, 44px);
+            font-size: clamp(28px, 4vw, 36px);
             line-height: 1.08;
             font-weight: 300;
             color: #fff;
@@ -480,7 +487,7 @@
             }
 
             .home-profile-title {
-                font-size: 34px;
+                font-size: 30px;
             }
 
             .home-profile-summary,
@@ -507,6 +514,7 @@
 
             .fh5co-post {
                 gap: 14px;
+                padding: 6px 8px 0;
             }
 
             .fh5co-post .home-article-entry {
@@ -681,9 +689,12 @@
         <div id="fh5co-main-content">
             <div class="fh5co-post">
                 @foreach ($topics as $topic)
+                    @php
+                        $topicCover = $topic->background ?: asset('uploads/images/system/default.jpg');
+                    @endphp
                     <div class="fh5co-entry home-article-entry">
                         <div class="home-article-card-cover">
-                            <img src="{{ $topic->user->avatar }}" alt="{{ $topic->title }}">
+                            <img src="{{ $topicCover }}" alt="{{ $topic->title }}">
                         </div>
                         <div class="home-article-card-content">
                             <span class="fh5co-post-date home-article-card-date">{{ $topic->created_at->diffForHumans() }}</span>
