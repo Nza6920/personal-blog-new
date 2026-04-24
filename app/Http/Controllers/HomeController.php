@@ -14,7 +14,7 @@ class HomeController extends Controller
         $topicsQuery = Topic::query()
             ->published()
             ->with(['user'])
-            ->latest('id');
+            ->latest('created_at');
 
         if ($search !== '') {
             $topicsQuery->where(function ($query) use ($search) {

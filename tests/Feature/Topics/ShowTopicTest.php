@@ -140,4 +140,73 @@ MARKDOWN,
         $response->assertSee('<h1 id="overview" data-topic-section="overview">Overview</h1>', false);
         $response->assertSee('<h1 id="overview-2" data-topic-section="overview-2">Overview</h1>', false);
     }
+
+    public function test_topic_detail_navigation_uses_created_at_descending_order(): void
+    {
+        $user = User::factory()->create();
+
+        $previousTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Newer Topic',
+                'is_published' => true,
+                'created_at' => now()->subDay(),
+            ]);
+
+        $currentTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Current Topic',
+                'is_published' => true,
+                'created_at' => now()->subDays(2),
+            ]);
+
+        $nextTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Older Topic',
+                'is_published' => true,
+                'created_at' => now()->subDays(3),
+            ]);
+
+        $response = $this->get(route('topics.show', $currentTopic));
+
+        $response->assertOk();
+        $response->assertViewHas('next', fn (?Topic $topic) => $topic?->is($previousTopic));
+        $response->assertViewHas('behind', fn (?Topic $topic) => $topic?->is($nextTopic));
+    }
+
+    public function test_topic_detail_navigation_ignores_unpublished_topics_when_browsing_public_routes(): void
+    {
+        $user = User::factory()->create();
+
+        $publishedPreviousTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Published Newer Topic',
+                'is_published' => true,
+                'created_at' => now()->subDay(),
+            ]);
+
+        Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Draft In Between',
+                'is_published' => false,
+                'created_at' => now()->subDays(2),
+            ]);
+
+        $currentTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Current Published Topic',
+                'is_published' => true,
+                'created_at' => now()->subDays(3),
+            ]);
+
+        $response = $this->get(route('topics.show', $currentTopic));
+
+        $response->assertOk();
+        $response->assertViewHas('next', fn (?Topic $topic) => $topic?->is($publishedPreviousTopic));
+    }
 }

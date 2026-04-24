@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Topics\BuildTopicTableOfContents;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TopicsController extends Controller
@@ -20,11 +21,29 @@ class TopicsController extends Controller
             $navigationTopics->published();
         }
 
-        $behindId = (clone $navigationTopics)->where('id', '<', $topic->id)->max('id');
-        $behind = Topic::find($behindId);
+        $behind = (clone $navigationTopics)
+            ->where(function (Builder $query) use ($topic) {
+                $query->where('created_at', '<', $topic->created_at)
+                    ->orWhere(function (Builder $query) use ($topic) {
+                        $query->where('created_at', $topic->created_at)
+                            ->where('id', '<', $topic->id);
+                    });
+            })
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->first();
 
-        $nextId = (clone $navigationTopics)->where('id', '>', $topic->id)->min('id');
-        $next = Topic::find($nextId);
+        $next = (clone $navigationTopics)
+            ->where(function (Builder $query) use ($topic) {
+                $query->where('created_at', '>', $topic->created_at)
+                    ->orWhere(function (Builder $query) use ($topic) {
+                        $query->where('created_at', $topic->created_at)
+                            ->where('id', '>', $topic->id);
+                    });
+            })
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->first();
 
         $topicContent = $buildTopicTableOfContents->handle($topic);
 

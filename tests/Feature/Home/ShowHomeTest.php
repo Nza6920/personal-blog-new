@@ -96,4 +96,33 @@ class ShowHomeTest extends TestCase
         $response->assertOk();
         $response->assertSee('uploads/images/system/default.jpg', false);
     }
+
+    public function test_home_page_orders_topics_by_created_at_descending(): void
+    {
+        $user = User::factory()->create();
+
+        $newerTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Newer Topic',
+                'is_published' => true,
+                'created_at' => now()->subDay(),
+            ]);
+
+        $olderTopic = Topic::factory()
+            ->for($user)
+            ->create([
+                'title' => 'Older Topic',
+                'is_published' => true,
+                'created_at' => now()->subDays(3),
+            ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSeeInOrder([
+            $newerTopic->title,
+            $olderTopic->title,
+        ]);
+    }
 }
