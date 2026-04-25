@@ -97,6 +97,42 @@ class ShowHomeTest extends TestCase
         $response->assertSee('uploads/images/system/default.jpg', false);
     }
 
+    public function test_home_page_renders_estimated_read_time_beside_publish_date(): void
+    {
+        Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'title' => 'Topic with read time',
+                'body' => '<p>'.implode(' ', array_fill(0, 420, 'reader')).'</p>',
+                'body_type' => 'HTML',
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee(trans_choice('home.article.read_time', 3, ['count' => 3]));
+        $response->assertSee('home-article-card-meta-separator', false);
+    }
+
+    public function test_home_page_omits_estimated_read_time_when_value_is_missing(): void
+    {
+        Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'title' => 'Topic without read time',
+                'body' => '...',
+                'body_type' => 'HTML',
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertDontSee(trans_choice('home.article.read_time', 1, ['count' => 1]));
+        $response->assertDontSee('<span class="home-article-card-meta-separator" aria-hidden="true">•</span>', false);
+    }
+
     public function test_home_page_orders_topics_by_created_at_descending(): void
     {
         $user = User::factory()->create();

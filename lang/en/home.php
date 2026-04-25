@@ -34,4 +34,7 @@ return [
         'placeholder' => 'Search articles',
         'submit_label' => 'Submit search',
     ],
+    'article' => [
+        'read_time' => '{1} :count min read|[2,*] :count mins read',
+    ],
 ];

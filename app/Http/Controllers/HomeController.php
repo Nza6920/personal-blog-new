@@ -23,7 +23,7 @@ class HomeController extends Controller
             });
         }
 
-        $topics = $topicsQuery->paginate(10)->appends([
+        $topics = $topicsQuery->paginate(6)->appends([
             'keyword' => $search,
         ]);
 

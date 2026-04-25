@@ -180,6 +180,7 @@
         }
 
         .theme-dark .home-article-card-date,
+        .theme-dark .home-article-card-meta-separator,
         .theme-dark .home-article-card-excerpt {
             color: rgba(230, 237, 245, 0.74);
         }
@@ -198,6 +199,10 @@
 
         .fh5co-post .fh5co-entry > div h2 {
             font-weight: 200;
+        }
+
+        .fh5co-post .home-article-entry > div h2 {
+            margin-bottom: 0;
         }
 
         .fh5co-post {
@@ -264,17 +269,36 @@
             padding: 6px 18px 6px 0;
         }
 
+        .home-article-card-meta {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
         .home-article-card-date {
             display: inline-flex;
             align-items: center;
-            margin-bottom: 10px;
             color: #667085;
             font-size: 14px;
             line-height: 1.4;
+            margin-bottom: 0;
+        }
+
+        .home-article-card-meta-separator {
+            display: inline-flex;
+            align-items: center;
+            align-self: center;
+            color: #98a2b3;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 0;
         }
 
         .home-article-card-content h2 {
-            margin: 0;
+            margin-top: 0;
+            margin-bottom: 0;
             font-size: clamp(24px, 2.8vw, 31px);
             line-height: 1.2;
             font-weight: 300;
@@ -713,7 +737,15 @@
                             <img src="{{ $topicCover }}" alt="{{ $topic->title }}">
                         </div>
                         <div class="home-article-card-content">
-                            <span class="fh5co-post-date home-article-card-date">{{ $topic->created_at->diffForHumans() }}</span>
+                            <div class="home-article-card-meta">
+                                <span class="fh5co-post-date home-article-card-date">{{ $topic->created_at->diffForHumans() }}</span>
+                                @if ($topic->estimated_read_time)
+                                    <span class="home-article-card-meta-separator" aria-hidden="true">•</span>
+                                    <span class="fh5co-post-date home-article-card-date">
+                                        {{ trans_choice('home.article.read_time', $topic->estimated_read_time, ['count' => $topic->estimated_read_time]) }}
+                                    </span>
+                                @endif
+                            </div>
                             <h2><a href="{{ route('topics.show', $topic) }}">{{ $topic->title }}</a></h2>
                             <p class="home-article-card-excerpt">{{ $topic->excerpt }}</p>
                         </div>

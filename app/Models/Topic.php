@@ -19,6 +19,7 @@ class Topic extends Model implements Feedable, Sitemapable
 
     protected $casts = [
         'created_at' => 'datetime',
+        'estimated_read_time' => 'integer',
         'is_published' => 'boolean',
         'updated_at' => 'datetime',
     ];

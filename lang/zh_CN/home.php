@@ -32,4 +32,7 @@ return [
         'placeholder' => '搜索文章',
         'submit_label' => '提交搜索',
     ],
+    'article' => [
+        'read_time' => ':count 分钟阅读',
+    ],
 ];
