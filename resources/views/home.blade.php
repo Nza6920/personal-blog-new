@@ -756,7 +756,7 @@
                 </div>
                 <footer class="home_footer">
                     <div>
-                        &copy; {{ date('Y') }} nza · Running since 2021 · Engineering Notes & Life Notes
+                        &copy; {{ date('Y') }} nza · Running since 2018 · Engineering Notes & Life Notes
                         <br><a href="https://beian.miit.gov.cn/" target="_blank">青ICP备18000982号</a>
                     </div>
                 </footer>
