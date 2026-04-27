@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Home;
 
+use App\Models\PortalSetting;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -95,6 +96,28 @@ class ShowHomeTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('uploads/images/system/default.jpg', false);
+    }
+
+    public function test_home_page_uses_portal_avatar_for_profile_panel(): void
+    {
+        $avatarPath = 'http://localhost/uploads/images/avatars/home-avatar.jpg';
+
+        PortalSetting::query()->create([
+            'home_avatar' => $avatarPath,
+        ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee('src="'.$avatarPath.'"', false);
+    }
+
+    public function test_home_page_uses_default_profile_avatar_when_portal_avatar_is_missing(): void
+    {
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee('uploads/images/system/avatar.jpg', false);
     }
 
     public function test_home_page_renders_estimated_read_time_beside_publish_date(): void

@@ -683,7 +683,7 @@
                 <div class="home-profile-hero">
                     <img
                         class="home-profile-avatar"
-                        src="{{ asset('uploads/images/system/avatar.jpg') }}"
+                        src="{{ $homeAvatar }}"
                         alt="{{ __('home.profile.avatar_alt') }}"
                     >
 

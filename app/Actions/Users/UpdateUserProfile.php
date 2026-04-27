@@ -3,6 +3,7 @@
 namespace App\Actions\Users;
 
 use App\Handlers\ImageUploadHandler;
+use App\Models\PortalSetting;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 
@@ -16,6 +17,9 @@ class UpdateUserProfile
             $result = $uploader->save($avatar, 'avatars', $user->id);
             if ($result) {
                 $user->avatar = $result['path'];
+                PortalSetting::query()->updateOrCreate([], [
+                    'home_avatar' => $result['path'],
+                ]);
             }
         }
 

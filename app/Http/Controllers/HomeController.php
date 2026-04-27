@@ -27,12 +27,15 @@ class HomeController extends Controller
             'keyword' => $search,
         ]);
 
-        $homeBio = PortalSetting::query()->value('home_bio') ?? PortalSetting::defaultBio();
+        $setting = PortalSetting::query()->first();
+        $homeBio = $setting?->home_bio ?? PortalSetting::defaultBio();
+        $homeAvatar = $setting?->home_avatar ?? PortalSetting::defaultAvatar();
 
         return view('home', [
             'topics' => $topics,
             'search' => $search,
             'homeBio' => $homeBio,
+            'homeAvatar' => $homeAvatar,
         ]);
     }
 }
