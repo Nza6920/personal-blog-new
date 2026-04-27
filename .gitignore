@@ -31,3 +31,6 @@ personal-blog.conf
 design
 .codex
 .opencode
+
+public/uploads/images/topics
+public/uploads/images/avatars
