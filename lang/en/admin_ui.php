@@ -20,6 +20,7 @@ return [
     ],
 
     'topic' => [
+        'cover_alt' => 'Topic cover',
         'published' => 'Published',
         'unpublished' => 'Unpublished',
         'publish_action' => 'Publish',

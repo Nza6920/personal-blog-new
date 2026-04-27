@@ -108,6 +108,40 @@ class TopicCoverImageTest extends TestCase
         ]);
     }
 
+    public function test_admin_topic_list_uses_topic_cover_image_thumbnail(): void
+    {
+        $user = User::factory()->create([
+            'avatar' => 'http://localhost/uploads/images/avatars/user-avatar.jpg',
+        ]);
+        $coverPath = 'http://localhost/uploads/images/covers/list-cover.jpg';
+
+        Topic::factory()->for($user)->create([
+            'title' => 'Topic with list cover',
+            'cover_img' => $coverPath,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('admin.show'));
+
+        $response->assertOk();
+        $response->assertSee('src="'.$coverPath.'"', false);
+        $response->assertSee('alt="'.__('admin_ui.topic.cover_alt').'"', false);
+    }
+
+    public function test_admin_topic_list_uses_default_cover_when_topic_cover_is_missing(): void
+    {
+        $user = User::factory()->create();
+
+        Topic::factory()->for($user)->create([
+            'title' => 'Topic without list cover',
+            'cover_img' => null,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('admin.show'));
+
+        $response->assertOk();
+        $response->assertSee('uploads/images/system/default.jpg', false);
+    }
+
     private function fakePngUpload(string $name, int $kilobytes): UploadedFile
     {
         $path = tempnam(sys_get_temp_dir(), 'topic-cover-');

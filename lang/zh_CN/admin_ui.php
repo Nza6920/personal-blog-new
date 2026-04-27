@@ -20,6 +20,7 @@ return [
     ],
 
     'topic' => [
+        'cover_alt' => '文章封面',
         'published' => '已发布',
         'unpublished' => '未发布',
         'publish_action' => '发布',

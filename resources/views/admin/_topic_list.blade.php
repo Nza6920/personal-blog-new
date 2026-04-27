@@ -1,11 +1,14 @@
 ﻿@if (count($topics))
     <div class="space-y-4">
         @foreach ($topics as $topic)
+            @php
+                $topicCover = $topic->cover_img ?: asset('uploads/images/system/default.jpg');
+            @endphp
             <article
                 class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
                     <img class="h-16 w-16 rounded-xl object-cover ring-1 ring-slate-200 dark:ring-slate-700"
-                         src="{{ $topic->user->avatar }}" alt="{{ $topic->user->name }}">
+                         src="{{ $topicCover }}" alt="{{ __('admin_ui.topic.cover_alt') }}">
                     <div class="flex-1 space-y-3">
                         <a href="{{ route('admin.topics.show', $topic) }}"
                            class="text-lg font-semibold text-slate-900 transition hover:text-slate-700 dark:text-white dark:hover:text-slate-200">
