@@ -67,6 +67,17 @@ return [
         'new_password_confirmation_label' => 'Confirm new password',
         'created_at_label' => 'Created at',
         'updated_at_label' => 'Updated at',
+        'home_profile' => [
+            'title' => 'Home profile content',
+            'description' => 'Configure the title, introduction, and tags shown in the homepage profile panel.',
+            'title_label' => 'Home profile title',
+            'section_label' => 'Home profile section',
+            'tags_label' => 'Home profile tags',
+            'tags_placeholder' => 'Type a tag, then press Enter or comma',
+            'tags_hint' => 'Press Enter or comma to add each tag. Up to 20 tags are supported.',
+            'remove_tag_label' => 'Remove :tag',
+            'updated' => 'Home profile content updated.',
+        ],
         'two_factor' => [
             'title' => 'Two-factor authentication',
             'description' => 'Add an extra verification code step for admin sign-in.',
@@ -87,6 +98,12 @@ return [
                 'message' => 'Use the new password the next time you sign in.',
                 'trigger' => 'Change password',
                 'confirm' => 'Confirm change',
+            ],
+            'update_home_profile' => [
+                'title' => 'Save home profile content?',
+                'message' => 'The homepage profile panel will be updated immediately.',
+                'trigger' => 'Save home profile',
+                'confirm' => 'Confirm save',
             ],
             'refresh_recovery_codes' => [
                 'title' => 'Refresh recovery codes?',

@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile', 'profile')->name('admin.profile');
         Route::post('/profile', 'updateProfile')->name('admin.profile.update');
         Route::post('/profile/password', 'updatePassword')->name('admin.profile.password');
+        Route::post('/profile/home-profile', 'updateHomeProfile')->name('admin.profile.home-profile');
         Route::get('/portal', 'portal')->name('admin.portal.edit');
         Route::post('/portal', 'updatePortal')->name('admin.portal.update');
         Route::get('/topics/{topic}', 'edit')->name('admin.topics.edit');

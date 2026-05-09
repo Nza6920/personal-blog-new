@@ -14,6 +14,7 @@ class ShowHomeTest extends TestCase
 
     public function test_home_page_renders_redesigned_left_profile_panel(): void
     {
+        $homeConfig = require lang_path('zh_CN/home.php');
         $topic = Topic::factory()
             ->for(User::factory())
             ->create([
@@ -26,10 +27,11 @@ class ShowHomeTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('data-home-profile-panel', false);
-        $response->assertSee(__('home.profile.title'));
-        $response->assertSee(__('home.profile.description'));
+        $response->assertSee($homeConfig['profile']['title']);
+        $response->assertSee($homeConfig['profile']['description']);
         $response->assertSee(__('home.about.title'));
         $response->assertSee(__('home.tech_stack.title'));
+        $response->assertSee($homeConfig['tech_stack']['items'][0]);
         $response->assertSee('data-home-profile-actions', false);
         $response->assertSee('data-home-tech-stack', false);
         $response->assertSee(route('feeds.main'), false);
@@ -102,7 +104,7 @@ class ShowHomeTest extends TestCase
     {
         $avatarPath = 'http://localhost/uploads/images/avatars/home-avatar.jpg';
 
-        PortalSetting::query()->create([
+        PortalSetting::query()->updateOrCreate([], [
             'home_avatar' => $avatarPath,
         ]);
 
@@ -114,10 +116,41 @@ class ShowHomeTest extends TestCase
 
     public function test_home_page_uses_default_profile_avatar_when_portal_avatar_is_missing(): void
     {
+        PortalSetting::query()->delete();
+
         $response = $this->get(route('home.show'));
 
         $response->assertOk();
         $response->assertSee('uploads/images/system/avatar.jpg', false);
+    }
+
+    public function test_home_page_renders_configured_profile_content(): void
+    {
+        PortalSetting::query()->updateOrCreate([], [
+            'home_profile_title' => 'Configured profile title',
+            'home_profile_section' => 'Configured profile section',
+            'home_profile_tags' => ['Laravel', 'Redis'],
+        ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee('Configured profile title');
+        $response->assertSee('Configured profile section');
+        $response->assertSee('Laravel');
+        $response->assertSee('Redis');
+    }
+
+    public function test_home_page_falls_back_to_translated_profile_content_when_settings_are_empty(): void
+    {
+        PortalSetting::query()->delete();
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee(__('home.profile.title'));
+        $response->assertSee(__('home.profile.description'));
+        $response->assertSee(__('home.tech_stack.items')[0]);
     }
 
     public function test_home_page_renders_estimated_read_time_beside_publish_date(): void

@@ -67,6 +67,17 @@ return [
         'new_password_confirmation_label' => '确认新密码',
         'created_at_label' => '创建时间',
         'updated_at_label' => '更新时间',
+        'home_profile' => [
+            'title' => '首页资料内容',
+            'description' => '配置首页左侧资料区域展示的标题、介绍和标签。',
+            'title_label' => '首页资料标题',
+            'section_label' => '首页资料介绍',
+            'tags_label' => '首页资料标签',
+            'tags_placeholder' => '输入标签后按回车或逗号添加',
+            'tags_hint' => '按回车或逗号添加标签，最多支持 20 个标签。',
+            'remove_tag_label' => '移除 :tag',
+            'updated' => '首页资料内容已更新',
+        ],
         'two_factor' => [
             'title' => '双因素认证',
             'description' => '为后台登录增加一次动态验证码校验。',
@@ -87,6 +98,12 @@ return [
                 'message' => '修改后请使用新密码重新登录后台。',
                 'trigger' => '修改密码',
                 'confirm' => '确认修改',
+            ],
+            'update_home_profile' => [
+                'title' => '确认保存首页资料内容？',
+                'message' => '保存后首页左侧资料区域将立即更新。',
+                'trigger' => '保存首页资料',
+                'confirm' => '确认保存',
             ],
             'refresh_recovery_codes' => [
                 'title' => '确认刷新恢复码？',

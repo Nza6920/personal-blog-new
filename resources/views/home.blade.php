@@ -21,7 +21,6 @@
             'icon' => 'icon-rss',
         ],
     ];
-    $techStack = __('home.tech_stack.items');
 @endphp
 
 @section('title', $metaTitle)
@@ -688,7 +687,7 @@
                     >
 
                     <div class="home-profile-copy">
-                        <h1 class="home-profile-title">{{ __('home.profile.title') }}</h1>
+                        <h1 class="home-profile-title">{{ $homeProfileTitle }}</h1>
                     </div>
                 </div>
 
@@ -710,13 +709,13 @@
                 <div class="home-profile-sections">
                     <section class="home-profile-section">
                         <h2 class="home-profile-section-title">{{ __('home.about.title') }}</h2>
-                        <p class="home-profile-section-body">{{ __('home.profile.description') }}</p>
+                        <p class="home-profile-section-body">{{ $homeProfileSection }}</p>
                     </section>
 
                     <section class="home-profile-section">
                         <h2 class="home-profile-section-title">{{ __('home.tech_stack.title') }}</h2>
                         <div class="home-profile-tags" data-home-tech-stack>
-                            @foreach ($techStack as $tech)
+                            @foreach ($homeProfileTags as $tech)
                                 <span class="home-profile-chip">{{ $tech }}</span>
                             @endforeach
                         </div>

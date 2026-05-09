@@ -76,6 +76,109 @@
             </div>
 
             <div class="border-t border-slate-100 px-6 py-5 dark:border-slate-800">
+                <form id="profile-home-profile-form" method="post" action="{{ route('admin.profile.home-profile') }}" class="space-y-4">
+                    @csrf
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{{ __('admin_ui.profile.home_profile.title') }}</h3>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ __('admin_ui.profile.home_profile.description') }}</p>
+                    </div>
+
+                    <flux:input
+                        :label="__('admin_ui.profile.home_profile.title_label')"
+                        name="home_profile_title"
+                        value="{{ old('home_profile_title', $setting?->home_profile_title ?? $defaultHomeProfileTitle) }}"
+                        required
+                    />
+
+                    <flux:textarea
+                        name="home_profile_section"
+                        :label="__('admin_ui.profile.home_profile.section_label')"
+                        rows="4"
+                        required
+                    >{{ old('home_profile_section', $setting?->home_profile_section ?? $defaultHomeProfileSection) }}</flux:textarea>
+
+                    @php
+                        $homeProfileTagInput = old('home_profile_tags');
+                        $initialHomeProfileTags = is_string($homeProfileTagInput)
+                            ? array_values(array_filter(array_map('trim', preg_split('/[\r\n,]+/', $homeProfileTagInput) ?: [])))
+                            : $homeProfileTags;
+                    @endphp
+
+                    <div
+                        x-data="{
+                            tags: @js($initialHomeProfileTags),
+                            tagInput: '',
+                            addTags(value) {
+                                value.split(/[\n,]+/).map((tag) => tag.trim()).filter(Boolean).forEach((tag) => {
+                                    if (!this.tags.includes(tag)) {
+                                        this.tags.push(tag);
+                                    }
+                                });
+                                this.tagInput = '';
+                            },
+                            removeTag(index) {
+                                this.tags.splice(index, 1);
+                            },
+                        }"
+                        class="space-y-2"
+                    >
+                        <label for="home-profile-tags-input" class="block text-sm font-medium text-slate-700 dark:text-slate-200">
+                            {{ __('admin_ui.profile.home_profile.tags_label') }}
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <input type="hidden" name="home_profile_tags" x-bind:value="tags.join('\n')" required>
+                        <div
+                            class="flex min-h-18 w-full flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:focus-within:border-slate-500 dark:focus-within:ring-slate-800"
+                            data-home-profile-tags-editor
+                            x-on:click="$refs.tagInput.focus()"
+                        >
+                            <template x-for="(tag, index) in tags" :key="tag">
+                                <span class="inline-flex min-h-8 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+                                    <span x-text="tag"></span>
+                                    <button
+                                        type="button"
+                                        class="inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-slate-700 dark:hover:text-white"
+                                        x-on:click.stop="removeTag(index)"
+                                        :aria-label="'{{ __('admin_ui.profile.home_profile.remove_tag_label') }}'.replace(':tag', tag)"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </span>
+                            </template>
+                            <input
+                                id="home-profile-tags-input"
+                                type="text"
+                                x-ref="tagInput"
+                                x-model="tagInput"
+                                x-on:keydown.enter.prevent="addTags(tagInput)"
+                                x-on:keydown.comma.prevent="addTags(tagInput)"
+                                x-on:paste.prevent="addTags($event.clipboardData.getData('text'))"
+                                x-on:blur="addTags(tagInput)"
+                                class="min-w-56 flex-1 border-0 bg-transparent p-0 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:ring-0 dark:text-white dark:placeholder:text-slate-500"
+                                placeholder="{{ __('admin_ui.profile.home_profile.tags_placeholder') }}"
+                            >
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ __('admin_ui.profile.home_profile.tags_hint') }}</p>
+
+                    <div class="flex justify-end">
+                        <x-confirm-modal
+                            name="confirm-home-profile-update-modal"
+                            :title="__('admin_ui.profile.modals.update_home_profile.title')"
+                            :message="__('admin_ui.profile.modals.update_home_profile.message')"
+                            target-form-id="profile-home-profile-form"
+                            :trigger-label="__('admin_ui.profile.modals.update_home_profile.trigger')"
+                            trigger-variant="filled"
+                            trigger-color="slate"
+                            :confirm-label="__('admin_ui.profile.modals.update_home_profile.confirm')"
+                            confirm-variant="primary"
+                            confirm-color="emerald"
+                        />
+                    </div>
+                </form>
+            </div>
+
+            <div class="border-t border-slate-100 px-6 py-5 dark:border-slate-800">
                 <form id="profile-password-form" method="post" action="{{ route('admin.profile.password') }}" class="grid gap-4 sm:grid-cols-2">
                     @csrf
                     <flux:input

@@ -4,10 +4,13 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FortifyTwoFactorTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_guest_is_redirected_when_accessing_two_factor_challenge(): void
     {
         $response = $this->get('/two-factor-challenge');
@@ -25,7 +28,6 @@ class FortifyTwoFactorTest extends TestCase
         ]);
         $user->id = 1;
         /** @var Authenticatable $user */
-
         $response = $this->actingAs($user)->get(route('admin.profile'));
 
         $response->assertOk();
@@ -47,7 +49,6 @@ class FortifyTwoFactorTest extends TestCase
         ]);
         $user->id = 1;
         /** @var Authenticatable $user */
-
         $response = $this->actingAs($user)->get(route('admin.profile'));
 
         $response->assertOk();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Portal\UpdateHomeProfileContent;
 use App\Actions\Portal\UpdatePortalBio;
 use App\Actions\Topics\CreateTopic;
 use App\Actions\Topics\DeleteTopic;
@@ -45,7 +46,17 @@ class AdminController extends Controller
 
     public function profile(Request $request)
     {
-        return view('admin.profile', ['user' => $request->user()]);
+        $setting = PortalSetting::query()->first();
+        $homeProfileTags = $setting?->home_profile_tags ?: PortalSetting::defaultProfileTags();
+
+        return view('admin.profile', [
+            'user' => $request->user(),
+            'setting' => $setting,
+            'defaultHomeProfileTitle' => PortalSetting::defaultProfileTitle(),
+            'defaultHomeProfileSection' => PortalSetting::defaultProfileSection(),
+            'homeProfileTags' => $homeProfileTags,
+            'homeProfileTagsText' => implode(PHP_EOL, $homeProfileTags),
+        ]);
     }
 
     public function portal()
@@ -110,6 +121,23 @@ class AdminController extends Controller
         $updateUserPassword->handle($request->user(), $validated['password']);
 
         return back()->with('success', '密码已更新');
+    }
+
+    public function updateHomeProfile(Request $request, UpdateHomeProfileContent $updateHomeProfileContent)
+    {
+        $validated = $request->validate([
+            'home_profile_title' => ['required', 'string', 'max:255'],
+            'home_profile_section' => ['required', 'string', 'max:1000'],
+            'home_profile_tags' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $updateHomeProfileContent->handle(
+            $validated['home_profile_title'],
+            $validated['home_profile_section'],
+            $validated['home_profile_tags']
+        );
+
+        return back()->with('success', __('admin_ui.profile.home_profile.updated'));
     }
 
     public function destroy(Topic $topic, DeleteTopic $deleteTopic)

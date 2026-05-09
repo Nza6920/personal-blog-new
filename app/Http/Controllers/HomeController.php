@@ -30,12 +30,18 @@ class HomeController extends Controller
         $setting = PortalSetting::query()->first();
         $homeBio = $setting?->home_bio ?? PortalSetting::defaultBio();
         $homeAvatar = $setting?->home_avatar ?? PortalSetting::defaultAvatar();
+        $homeProfileTitle = $setting?->home_profile_title ?: PortalSetting::defaultProfileTitle();
+        $homeProfileSection = $setting?->home_profile_section ?: PortalSetting::defaultProfileSection();
+        $homeProfileTags = $setting?->home_profile_tags ?: PortalSetting::defaultProfileTags();
 
         return view('home', [
             'topics' => $topics,
             'search' => $search,
             'homeBio' => $homeBio,
             'homeAvatar' => $homeAvatar,
+            'homeProfileTitle' => $homeProfileTitle,
+            'homeProfileSection' => $homeProfileSection,
+            'homeProfileTags' => $homeProfileTags,
         ]);
     }
 }
