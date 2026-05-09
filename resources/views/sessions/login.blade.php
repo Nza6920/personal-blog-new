@@ -32,6 +32,7 @@
                         :label="__('auth_ui.login.email_label')"
                         :placeholder="__('auth_ui.login.email_placeholder')"
                         autocomplete="email"
+                        autofocus
                         required
                     />
 

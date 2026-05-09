@@ -31,6 +31,7 @@
                         :label="__('auth_ui.two_factor.code_label')"
                         :placeholder="__('auth_ui.two_factor.code_placeholder')"
                         autocomplete="one-time-code"
+                        autofocus
                     />
 
                     <flux:input
