@@ -178,12 +178,12 @@
         }
 
         .topic-body pre {
-            background-color: #af8b33;
+            background-color: #ceb371;
         }
 
         .topic-body blockquote {
             color: #E0F2FE;
-            background-color: #0976a9;
+            background-color: #48839f;
         }
 
         .topic-body img {
