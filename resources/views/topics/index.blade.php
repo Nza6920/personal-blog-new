@@ -178,7 +178,66 @@
         }
 
         .topic-body pre {
+            position: relative;
             background-color: #ceb371;
+            padding-top: 52px;
+        }
+
+        .topic-copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 1px solid rgba(53, 36, 36, 0.18);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #352424;
+            font-size: 14px;
+            line-height: 1;
+            transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+        }
+
+        .topic-copy-button i {
+            background: transparent;
+            color: inherit;
+            line-height: 1;
+        }
+
+        .topic-copy-button:hover,
+        .topic-copy-button:focus {
+            background: #fff7e0;
+            border-color: rgba(53, 36, 36, 0.32);
+            color: #1f1616;
+        }
+
+        .topic-copy-button.is-copied {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(53, 36, 36, 0.32);
+            color: #1f7a4f;
+        }
+
+        .theme-dark .topic-copy-button {
+            border-color: rgba(248, 250, 252, 0.18);
+            background: rgba(15, 23, 42, 0.72);
+            color: #f8fafc;
+        }
+
+        .theme-dark .topic-copy-button:hover,
+        .theme-dark .topic-copy-button:focus {
+            background: rgba(30, 41, 59, 0.92);
+            border-color: rgba(248, 250, 252, 0.3);
+        }
+
+        .theme-dark .topic-copy-button.is-copied {
+            background: rgba(15, 23, 42, 0.72);
+            border-color: rgba(248, 250, 252, 0.3);
+            color: #34d399;
         }
 
         .topic-body blockquote {
@@ -427,7 +486,12 @@
                                         </ul>
                                     </aside>
                                 @endif
-                                <div class="topic-body">
+                                <div
+                                    class="topic-body"
+                                    data-copy-label="{{ __('topic.copy_code') }}"
+                                    data-copied-label="{{ __('topic.copied_code') }}"
+                                    data-copy-aria-label="{{ __('topic.copy_code_aria_label') }}"
+                                >
                                     {!! $topicBodyHtml !!}
                                 </div>
                             </div>
@@ -694,6 +758,7 @@
 
                                                             const $overlay = $('.image-preview-overlay');
                                                             const $preview = $overlay.find('img');
+                                                            const $topicBody = $('.topic-body');
                                                             const minScale = 0.5;
                                                             const maxScale = 5;
                                                             const scaleStep = 0.1;
@@ -707,6 +772,89 @@
                                                             function applyTransform() {
                                                                 const scale = currentScale.toFixed(2);
                                                                 $preview.css('transform', 'translate(' + translateX + 'px, ' + translateY + 'px) scale(' + scale + ')');
+                                                            }
+
+                                                            function copyText(value) {
+                                                                if (navigator.clipboard && window.isSecureContext) {
+                                                                    return navigator.clipboard.writeText(value);
+                                                                }
+
+                                                                return new Promise(function (resolve, reject) {
+                                                                    const textarea = document.createElement('textarea');
+                                                                    textarea.value = value;
+                                                                    textarea.setAttribute('readonly', '');
+                                                                    textarea.style.position = 'absolute';
+                                                                    textarea.style.left = '-9999px';
+                                                                    document.body.appendChild(textarea);
+                                                                    textarea.select();
+
+                                                                    try {
+                                                                        if (!document.execCommand('copy')) {
+                                                                            throw new Error('Copy command was rejected.');
+                                                                        }
+
+                                                                        resolve();
+                                                                    } catch (error) {
+                                                                        reject(error);
+                                                                    } finally {
+                                                                        document.body.removeChild(textarea);
+                                                                    }
+                                                                });
+                                                            }
+
+                                                            if ($topicBody.length) {
+                                                                const copyLabel = $topicBody.data('copyLabel');
+                                                                const copiedLabel = $topicBody.data('copiedLabel');
+                                                                const copyAriaLabel = $topicBody.data('copyAriaLabel');
+
+                                                                $topicBody.find('pre').each(function (index) {
+                                                                    const $pre = $(this);
+
+                                                                    if ($pre.find('.topic-copy-button').length) {
+                                                                        return;
+                                                                    }
+
+                                                                    const $button = $('<button/>', {
+                                                                        type: 'button',
+                                                                        class: 'topic-copy-button',
+                                                                        'aria-label': copyAriaLabel,
+                                                                        'data-copy-button': '',
+                                                                        title: copyLabel,
+                                                                    });
+                                                                    const $icon = $('<i/>', {
+                                                                        class: 'icon-clipboard',
+                                                                        'aria-hidden': 'true',
+                                                                    });
+
+                                                                    let resetTimer = null;
+
+                                                                    $button.append($icon);
+
+                                                                    $button.on('click', function () {
+                                                                        const codeText = $pre.find('code').first().text() || $pre.text();
+
+                                                                        copyText(codeText).then(function () {
+                                                                            window.clearTimeout(resetTimer);
+                                                                            $button.addClass('is-copied')
+                                                                                .attr('aria-label', copiedLabel)
+                                                                                .attr('title', copiedLabel);
+                                                                            $icon.attr('class', 'icon-check');
+                                                                            resetTimer = window.setTimeout(function () {
+                                                                                $button.removeClass('is-copied')
+                                                                                    .attr('aria-label', copyAriaLabel)
+                                                                                    .attr('title', copyLabel);
+                                                                                $icon.attr('class', 'icon-clipboard');
+                                                                            }, 1500);
+                                                                        }).catch(function () {
+                                                                            $button.attr('aria-label', copyAriaLabel)
+                                                                                .attr('title', copyLabel);
+                                                                            $icon.attr('class', 'icon-clipboard');
+                                                                        });
+                                                                    });
+
+                                                                    $pre.attr('data-copy-code-block', index + 1);
+                                                                    $pre.prepend($button);
+                                                                });
                                                             }
 
                                                             $(document).on('click', '.topic-body img', function (event) {

@@ -68,6 +68,29 @@ MARKDOWN,
         $response->assertSee('<td>把 SDD 做成完整工程流程</td>', false);
     }
 
+    public function test_topic_detail_page_renders_copy_button_hooks_for_markdown_code_blocks(): void
+    {
+        $topic = Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'body' => <<<'MARKDOWN'
+```php
+echo 'hello world';
+```
+MARKDOWN,
+                'body_type' => 'MARKDOWN',
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('topics.show', $topic));
+
+        $response->assertOk();
+        $response->assertSee('data-copy-label=', false);
+        $response->assertSee('data-copy-aria-label=', false);
+        $response->assertSee('topic-copy-button', false);
+        $response->assertSee("\$topicBody.find('pre').each(function (index) {", false);
+    }
+
     public function test_topic_detail_page_renders_table_of_contents_for_second_level_headings(): void
     {
         $topic = Topic::factory()
