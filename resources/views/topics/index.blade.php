@@ -180,7 +180,6 @@
         .topic-body pre {
             position: relative;
             background-color: #ceb371;
-            padding-top: 52px;
         }
 
         .topic-copy-button {
