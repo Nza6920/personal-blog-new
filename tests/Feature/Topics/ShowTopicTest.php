@@ -87,8 +87,11 @@ MARKDOWN,
         $response->assertOk();
         $response->assertSee('data-copy-label=', false);
         $response->assertSee('data-copy-aria-label=', false);
-        $response->assertSee('topic-copy-button', false);
-        $response->assertSee("\$topicBody.find('pre').each(function (index) {", false);
+        $response->assertSee('<button type="button" class="topic-copy-button" aria-label="', false);
+        $response->assertSee('data-copy-button=""', false);
+        $response->assertSee('(function initTopicCopyHandler() {', false);
+        $response->assertSee('window.__topicCopyHandlerBound = true;', false);
+        $response->assertSee("document.addEventListener('click', function (event) {", false);
     }
 
     public function test_topic_detail_page_renders_table_of_contents_for_second_level_headings(): void
