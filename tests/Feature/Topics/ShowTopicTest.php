@@ -89,7 +89,22 @@ MARKDOWN,
         $response->assertSee('data-copy-aria-label=', false);
         $response->assertSee('<button type="button" class="topic-copy-button" aria-label="', false);
         $response->assertSee('data-copy-button=""', false);
-        $response->assertSee('resources/js/app.js', false);
+        $response->assertSee('/build/assets/app-', false);
+    }
+
+    public function test_topic_detail_page_does_not_load_vulnerable_bootstrap_asset(): void
+    {
+        $topic = Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('topics.show', $topic));
+
+        $response->assertOk();
+        $response->assertDontSee('/js/bootstrap.min.js', false);
+        $response->assertSee('/js/jquery.min.js', false);
     }
 
     public function test_topic_detail_page_renders_table_of_contents_for_second_level_headings(): void

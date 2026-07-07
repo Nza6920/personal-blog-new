@@ -66,6 +66,21 @@ class ShowHomeTest extends TestCase
         $response->assertSee('class="js-search-toggle"', false);
     }
 
+    public function test_home_page_does_not_load_vulnerable_bootstrap_asset(): void
+    {
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertDontSee('/js/bootstrap.min.js', false);
+        $response->assertSee('/js/jquery.min.js', false);
+
+        $this->assertFileDoesNotExist(public_path('js/bootstrap.min.js'));
+        $this->assertStringContainsString(
+            'jQuery v3.7.1',
+            file_get_contents(public_path('js/jquery.min.js'))
+        );
+    }
+
     public function test_home_page_uses_topic_cover_image_for_article_card(): void
     {
         $coverPath = 'http://localhost/uploads/images/covers/home-cover.jpg';
