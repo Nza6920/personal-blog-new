@@ -54,6 +54,11 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'trusted_hosts' => array_values(array_filter(array_map(
+        'trim',
+        explode(',', env('APP_TRUSTED_HOSTS', '^www\.nnzzaa\.cn$,^nnzzaa\.cn$,^localhost$,^127\.0\.0\.1$'))
+    ))),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

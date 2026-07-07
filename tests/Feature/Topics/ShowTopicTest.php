@@ -11,6 +11,43 @@ class ShowTopicTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_topic_detail_page_rejects_untrusted_hosts(): void
+    {
+        $this->app->detectEnvironment(fn () => 'production');
+        config([
+            'app.debug' => false,
+            'app.env' => 'production',
+        ]);
+
+        $topic = Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'is_published' => true,
+            ]);
+
+        $response = $this->get('https://www.mqzilw.com/topics/'.$topic->getRouteKey());
+
+        $response->assertStatus(400);
+        $response->assertDontSee('www.mqzilw.com', false);
+    }
+
+    public function test_topic_detail_page_accepts_trusted_host_and_renders_canonical_url(): void
+    {
+        $topic = Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'is_published' => true,
+            ]);
+
+        $topicUrl = 'https://www.nnzzaa.cn/topics/'.$topic->getRouteKey();
+
+        $response = $this->get($topicUrl);
+
+        $response->assertOk();
+        $response->assertSee('<meta property="og:url" content="'.$topicUrl.'">', false);
+        $response->assertSee('<link rel="canonical" href="'.$topicUrl.'">', false);
+    }
+
     public function test_topic_detail_page_renders_table_of_contents_for_level_one_headings(): void
     {
         $topic = Topic::factory()
