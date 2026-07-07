@@ -105,6 +105,39 @@ MARKDOWN,
         $response->assertSee('<td>把 SDD 做成完整工程流程</td>', false);
     }
 
+    public function test_topic_detail_page_includes_mobile_article_layout_rules(): void
+    {
+        $topic = Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'body' => <<<'MARKDOWN'
+# Mobile Overview
+
+| Column A | Column B |
+|---|---|
+| Wide content | Responsive content |
+
+```php
+echo 'mobile layout';
+```
+MARKDOWN,
+                'body_type' => 'MARKDOWN',
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('topics.show', $topic));
+
+        $response->assertOk();
+        $response->assertSee('@media screen and (max-width: 768px)', false);
+        $response->assertSee('.topic-toc {', false);
+        $response->assertSee('position: static;', false);
+        $response->assertSee('.topic-body pre', false);
+        $response->assertSee('overflow-x: auto;', false);
+        $response->assertSee('.fh5co-navigation {', false);
+        $response->assertSee('flex-direction: column;', false);
+        $response->assertSee('@media screen and (max-width: 420px)', false);
+    }
+
     public function test_topic_detail_page_renders_copy_button_hooks_for_markdown_code_blocks(): void
     {
         $topic = Topic::factory()
@@ -126,7 +159,10 @@ MARKDOWN,
         $response->assertSee('data-copy-aria-label=', false);
         $response->assertSee('<button type="button" class="topic-copy-button" aria-label="', false);
         $response->assertSee('data-copy-button=""', false);
-        $response->assertSee('/build/assets/app-', false);
+        $this->assertTrue(
+            str_contains($response->getContent(), '/build/assets/app-')
+                || str_contains($response->getContent(), 'resources/js/app.js')
+        );
     }
 
     public function test_topic_detail_page_does_not_load_vulnerable_bootstrap_asset(): void

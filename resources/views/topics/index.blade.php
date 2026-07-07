@@ -251,6 +251,29 @@
             height: auto;
         }
 
+        .topic-body {
+            min-width: 0;
+            max-width: 100%;
+            overflow-wrap: break-word;
+        }
+
+        .topic-body pre {
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .topic-body pre code {
+            white-space: pre;
+        }
+
+        .topic-body table {
+            display: block;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .topic-content-shell {
             display: flex;
             flex-direction: column;
@@ -394,6 +417,175 @@
                 top: 28px;
                 width: 360px;
                 flex: 0 0 360px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            #page.topic-index-wrapper {
+                overflow-x: hidden;
+            }
+
+            .single #fh5co-aside,
+            #fh5co-aside {
+                height: auto;
+                min-height: 360px;
+            }
+
+            #fh5co-aside .page-title {
+                right: 0;
+                left: 0;
+                padding: 28px 18px;
+            }
+
+            .single #fh5co-aside .page-title h2 {
+                font-size: 34px;
+                line-height: 1.18;
+                overflow-wrap: anywhere;
+            }
+
+            #fh5co-aside .page-title > span {
+                font-size: 14px;
+            }
+
+            #page.topic-index-wrapper #fh5co-main-content {
+                max-width: 100%;
+            }
+
+            .padding {
+                padding: 24px 16px;
+            }
+
+            .topic-content-shell {
+                gap: 24px;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .topic-toc {
+                position: static;
+                width: 100%;
+                max-width: 100%;
+                align-self: stretch;
+                padding: 16px 18px;
+                border-radius: 10px;
+                overflow-x: hidden;
+            }
+
+            .topic-toc h3 {
+                font-size: 14px;
+            }
+
+            .topic-toc a {
+                min-height: 36px;
+                display: flex;
+                align-items: center;
+                overflow-wrap: anywhere;
+            }
+
+            .topic-body {
+                width: 100%;
+                max-width: 100%;
+                font-size: 16px;
+                line-height: 1.78;
+            }
+
+            .topic-body h1 {
+                font-size: 30px;
+                line-height: 1.25;
+            }
+
+            .topic-body h2 {
+                font-size: 25px;
+                line-height: 1.3;
+            }
+
+            .topic-body blockquote {
+                margin-right: 0;
+                margin-left: 0;
+            }
+
+            .topic-body pre {
+                padding-right: 52px;
+            }
+
+            .topic-copy-button {
+                top: 10px;
+                right: 10px;
+            }
+
+            .fh5co-navigation {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            .fh5co-navigation .fh5co-cover {
+                width: 100%;
+                float: none;
+            }
+
+            .fh5co-navigation .prev,
+            .fh5co-navigation .next {
+                text-align: left;
+            }
+
+            .fh5co-navigation .prev:hover,
+            .fh5co-navigation .next:hover {
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .fh5co-navigation .fh5co-cover .copy .display-t,
+            .fh5co-navigation .fh5co-cover .copy .display-tc {
+                height: 220px;
+            }
+
+            .fh5co-navigation .fh5co-cover .copy .display-tc div {
+                padding: 22px 18px;
+            }
+
+            .fh5co-navigation .fh5co-cover .copy .display-tc div .behind_post,
+            .fh5co-navigation .fh5co-cover .copy .display-tc div .next_post {
+                position: static;
+                margin-bottom: 8px;
+            }
+
+            .fh5co-navigation .fh5co-cover .copy .display-tc div h2 {
+                font-size: 24px;
+                line-height: 1.25;
+                overflow-wrap: anywhere;
+            }
+        }
+
+        @media screen and (max-width: 420px) {
+            .single #fh5co-aside,
+            #fh5co-aside {
+                min-height: 320px;
+            }
+
+            .single #fh5co-aside .page-title h2 {
+                font-size: 28px;
+            }
+
+            .padding {
+                padding: 20px 12px;
+            }
+
+            .topic-toc {
+                padding: 14px;
+            }
+
+            .topic-body h1 {
+                font-size: 27px;
+            }
+
+            .topic-body h2 {
+                font-size: 23px;
             }
         }
 

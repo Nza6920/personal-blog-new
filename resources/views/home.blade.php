@@ -52,6 +52,7 @@
 
         #fh5co-main-content {
             margin-left: 30%;
+            min-width: 0;
         }
 
         #fh5co-aside .overlay {
@@ -491,6 +492,11 @@
             text-align: center;
         }
 
+        .home-pagination nav {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
         @media screen and (max-width: 1024px) {
             .home-profile-content {
                 max-width: 100%;
@@ -516,13 +522,34 @@
         }
 
         @media screen and (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            #page {
+                overflow-x: hidden;
+            }
+
+            #fh5co-aside {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: 0;
+            }
+
+            #fh5co-main-content {
+                width: 100%;
+                margin-left: 0;
+            }
+
             .home-profile-shell {
-                min-height: 700px;
+                min-height: 0;
                 padding: 22px 18px 28px;
             }
 
             .home-profile-content {
                 margin-top: 22px;
+                max-width: 100%;
             }
 
             .home-profile-title {
@@ -537,12 +564,15 @@
 
             .home-search-panel {
                 top: 22%;
+                left: 50%;
                 width: calc(100% - 32px);
+                max-width: 520px;
                 padding: 14px 16px;
             }
 
             .home-search-panel form {
                 width: 100%;
+                display: flex;
             }
 
             .home-search-panel input[type="search"] {
@@ -551,15 +581,25 @@
                 font-size: 16px;
             }
 
+            .home-search-panel button {
+                flex: 0 0 auto;
+                min-width: 44px;
+                min-height: 44px;
+            }
+
             .fh5co-post {
                 gap: 14px;
                 padding: 6px 8px 0;
+                max-width: 100%;
+                overflow-x: hidden;
             }
 
             .fh5co-post .home-article-entry {
                 grid-template-columns: 1fr;
                 row-gap: 14px;
                 padding: 14px 12px 18px;
+                width: 100%;
+                overflow: hidden;
             }
 
             .home-article-card-cover {
@@ -569,10 +609,43 @@
 
             .home-article-card-content {
                 padding: 0 0 0;
+                min-width: 0;
             }
 
             .home-article-card-content h2 {
                 font-size: 24px;
+                overflow-wrap: anywhere;
+            }
+
+            .home-article-card-excerpt {
+                overflow-wrap: anywhere;
+            }
+
+            .home-pagination {
+                padding: 0 4px;
+            }
+
+            .home_footer {
+                padding: 14px 12px !important;
+                overflow-wrap: anywhere;
+            }
+        }
+
+        @media screen and (max-width: 420px) {
+            .home-profile-title {
+                font-size: 26px;
+            }
+
+            .home-profile-actions {
+                gap: 10px;
+            }
+
+            .home-article-card-content h2 {
+                font-size: 22px;
+            }
+
+            .home-article-card-meta {
+                gap: 6px;
             }
         }
     </style>

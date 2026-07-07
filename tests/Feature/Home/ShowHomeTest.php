@@ -66,6 +66,28 @@ class ShowHomeTest extends TestCase
         $response->assertSee('class="js-search-toggle"', false);
     }
 
+    public function test_home_page_includes_mobile_article_list_layout_rules(): void
+    {
+        Topic::factory()
+            ->for(User::factory())
+            ->create([
+                'title' => 'Mobile Layout Topic',
+                'excerpt' => 'A concise mobile layout summary.',
+                'is_published' => true,
+            ]);
+
+        $response = $this->get(route('home.show'));
+
+        $response->assertOk();
+        $response->assertSee('@media screen and (max-width: 768px)', false);
+        $response->assertSee('#fh5co-main-content', false);
+        $response->assertSee('margin-left: 0;', false);
+        $response->assertSee('grid-template-columns: 1fr;', false);
+        $response->assertSee('overflow-x: hidden;', false);
+        $response->assertSee('min-width: 44px;', false);
+        $response->assertSee('@media screen and (max-width: 420px)', false);
+    }
+
     public function test_home_page_does_not_load_vulnerable_bootstrap_asset(): void
     {
         $response = $this->get(route('home.show'));
