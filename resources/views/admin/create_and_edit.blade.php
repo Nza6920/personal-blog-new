@@ -3,7 +3,7 @@
 @section('title', $topic->id ? __('admin_ui.editor.edit_topic') : __('admin_ui.editor.new_topic'))
 
 @section('content')
-<div class="mx-auto max-w-3xl mt-3">
+<div class="mx-auto w-full max-w-5xl mt-3">
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div>
