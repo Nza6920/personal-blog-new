@@ -14,7 +14,7 @@ class UpdatePortalBio
         $previousBio = $setting?->home_bio;
 
         if (! $setting) {
-            $setting = new PortalSetting();
+            $setting = new PortalSetting;
         }
 
         $setting->home_bio = $bio;

@@ -31,6 +31,9 @@ personal-blog.conf
 design
 .codex
 .opencode
+/.agents/skills/
+/.codegraph/
+/skills-lock.json
 
 public/uploads/images/topics
 public/uploads/images/avatars

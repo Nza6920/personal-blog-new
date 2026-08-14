@@ -16,6 +16,7 @@ return new class extends Migration
 
         if ($driver === 'mysql') {
             DB::statement('CREATE INDEX topics_excerpt_index ON topics (excerpt(191))');
+
             return;
         }
 
@@ -33,6 +34,7 @@ return new class extends Migration
 
         if ($driver === 'mysql') {
             DB::statement('DROP INDEX topics_excerpt_index ON topics');
+
             return;
         }
 

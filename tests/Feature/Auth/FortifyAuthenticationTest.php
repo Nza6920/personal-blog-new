@@ -60,9 +60,7 @@ class FortifyAuthenticationTest extends TestCase
                 return null;
             }
 
-            public function setRememberToken($_value): void
-            {
-            }
+            public function setRememberToken($_value): void {}
 
             public function getRememberTokenName(): string
             {
