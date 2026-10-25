@@ -4,8 +4,40 @@
 ```bash
 sudo apt update
 sudo apt install -y nginx git unzip supervisor
-sudo apt install -y php8.3-fpm php8.3-mysql php8.3-xml php8.3-mbstring php8.3-curl php8.3-zip php8.3-bcmath php8.3-gd php8.3-intl
+sudo apt install -y php8.3-cli php8.3-fpm php8.3-mysql php8.3-xml php8.3-mbstring php8.3-curl php8.3-zip php8.3-bcmath php8.3-gd php8.3-intl
 ```
+
+### PHP 安全版本检查
+
+Ubuntu 24.04 的 PHP 软件包必须达到 `8.3.6-0ubuntu0.24.04.13` 或更新版本，
+该版本已修复 CVE-2026-109618 和 CVE-2026-109619。
+安装依赖后、启动网站前执行：
+
+```bash
+for package in php8.3-cli php8.3-common php8.3-fpm; do
+    version=$(dpkg-query -W -f='${Version}' "$package") || exit 1
+    if ! dpkg --compare-versions "$version" ge '8.3.6-0ubuntu0.24.04.13'; then
+        echo "$package $version 尚未包含所需安全补丁，请先更新软件源并升级 PHP。" >&2
+        exit 1
+    fi
+    echo "$package $version: OK"
+done
+```
+
+如果检查失败，先确认 `noble-security` 或 `noble-updates` 已启用，并检查候选版本：
+
+```bash
+sudo apt update
+apt-cache policy php8.3-fpm php8.3-cli php8.3-common
+apt-mark showhold
+```
+
+Ubuntu 回移了安全补丁，`php -v` 仍显示 `8.3.6` 是正常现象，必须比较完整软件包版本。
+不要通过 `composer.json` 的 PHP 版本下限判断发行版是否已打补丁，也不要用
+`composer update` 代替 PHP 系统升级。
+
+参考：[Ubuntu 安全公告 USN-8948-1](https://ubuntu.com/security/notices/USN-8948-1)、
+[PHP 官方安全公告](https://www.php.net/archive/2026.php#2026-10-21-1)。
 
 ## 2) 安装 Composer 与 Node.js
 ```bash
@@ -182,3 +214,51 @@ sudo find /var/www/personal-blog/public/uploads -type f -exec chmod 644 {} \;
 sudo systemctl start nginx
 sudo systemctl status nginx
 ```
+
+## 10) 已有服务器的 PHP 安全更新
+
+先确认软件源的候选版本满足第 1 节的安全要求。升级可能自动重启 PHP-FPM，
+请在可接受短暂中断的时段操作，并保留现有 PHP 配置：
+
+```bash
+sudo php-fpm8.3 -t
+sudo cp -a /etc/php/8.3 "/etc/php/8.3.backup-$(date +%Y%m%d-%H%M%S)"
+sudo apt update
+sudo apt install --only-upgrade php8.3-cli php8.3-common php8.3-fpm
+sudo php-fpm8.3 -t && sudo systemctl restart php8.3-fpm
+systemctl is-active php8.3-fpm
+```
+
+重新执行第 1 节的软件包版本检查，并验证首页、文章、登录和图片上传。
+如有 Supervisor 管理的 Laravel 队列，在项目目录使用部署用户执行
+`php artisan queue:restart`，并确认队列进程已重新启动。
+软件包升级不会替换已运行进程中的 PHP，必须重启实际提供服务的进程。
+
+## 11) 本地 WSL 环境的 PHP 安全更新
+
+以下命令适用于 Ubuntu 24.04 的本地 CLI 开发环境：
+
+```bash
+sudo apt update
+sudo apt install --only-upgrade php8.3-cli php8.3-common
+dpkg-query -W -f='${Package}\t${Version}\n' php8.3-cli php8.3-common
+```
+
+两个软件包均应达到 `8.3.6-0ubuntu0.24.04.13` 或更新版本。
+停止并重新启动已有的 `composer run dev`、`php artisan serve` 或队列进程，
+然后在项目目录执行 `composer run test`。如果本地还运行 PHP-FPM，请按第 10 节更新和重启。
+
+## 12) Docker PHP 镜像更新
+
+`Dockerfile` 使用包含安全补丁的 `php:8.2.35-apache`，并在构建时检查实际 PHP 版本。
+后续更新镜像时，PHP 8.2 分支不得低于 8.2.35；切换分支时应重新核对该分支的修复版本，
+同步调整构建检查。PHP 8.2 将于 2026-12-31 结束上游支持，请在此之前安排分支升级。
+
+```bash
+docker build --pull -t personal-blog:php-security .
+docker run --rm personal-blog:php-security php -v
+```
+
+构建成功后，使用新镜像重新创建实际的 Web 容器，并保留原有环境变量、挂载和网络配置。
+只重启旧容器不会应用新镜像。仓库的 `docker-compose.yml` 仅定义 MySQL，
+`docker compose up -d` 不会构建或替换 PHP Web 容器。

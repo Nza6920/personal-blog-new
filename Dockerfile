@@ -1,5 +1,9 @@
-FROM php:8.2-apache
+FROM php:8.2.35-apache
 
+# CVE-2026-109618 / CVE-2026-109619: require the patched PHP 8.2 branch.
+RUN php -r 'echo "PHP ", PHP_VERSION, PHP_EOL; exit(PHP_VERSION_ID >= 80235 && PHP_VERSION_ID < 80300 ? 0 : 1);'
+
+# PDO, mbstring, tokenizer and XML are already provided by the base image.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libfreetype6-dev \
@@ -9,7 +13,7 @@ RUN apt-get update \
         unzip \
         git \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) pdo pdo_mysql mbstring tokenizer xml zip gd \
+    && docker-php-ext-install -j$(nproc) pdo_mysql zip gd \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
